@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:orange_theatre/data/response/api_response.dart';
-import 'package:orange_theatre/models/trending_movies/trending_movies_model.dart';
-import 'package:orange_theatre/repository/trending_movies/trending_movies_repository.dart';
+import '../../models/models.dart';
+import '../../repository/repository.dart';
 part 'trending_movies_event.dart';
 part 'trending_movies_state.dart';
 
