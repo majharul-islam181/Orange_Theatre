@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:orange_theatre/config/colors/color.dart';
 import 'package:orange_theatre/utils/constant.dart';
+import 'package:orange_theatre/views/explore/explore_root.dart';
 import 'package:orange_theatre/views/widgets/bottombar_item.dart';
 import '../views.dart';
 
@@ -22,7 +23,7 @@ class _RootAppState extends State<RootApp> with TickerProviderStateMixin {
     },
     {
       "icon": "assets/icons/search copy.svg",
-      "page": const SearchScreen(),
+      "page": const ExploreRoot(),
     },
     {
       "icon": "assets/icons/location.svg",

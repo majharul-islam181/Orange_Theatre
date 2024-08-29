@@ -19,12 +19,14 @@ class TrendingMoviesBloc
       FetchTrendingMoviesEvent event, Emitter<TrendingMoviesState> emit) async {
     emit(state.copyWith(trendingMoviesList: ApiResponse.loading()));
 
+
     try {
       final trendingList =
           await trendingMoviesRepository.fetchTrendingMoviesList();
       emit(state.copyWith(
           trendingMoviesList: ApiResponse.completed(trendingList)));
     } catch (error) {
+      print("error in trending api bloc");
       emit(state.copyWith(
           trendingMoviesList: ApiResponse.error(error.toString())));
     }

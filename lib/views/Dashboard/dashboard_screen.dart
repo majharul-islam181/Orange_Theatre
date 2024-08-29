@@ -21,7 +21,6 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   late TrendingMoviesBloc trendingMoviesBloc;
   late UpcomingMoviesBloc upcomingMoviesBloc;
-  bool hasInternetConnection = true;
 
   @override
   void initState() {
@@ -115,6 +114,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
           const SizedBox(
             height: 10,
           ),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(15, 0, 15, 10),
+            child: Text(
+              "Top Upcoming Movies",
+              style: TextStyle(
+                color: AppColor.textColor,
+                fontWeight: FontWeight.w500,
+                fontSize: 18,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
           _topUpcomingMovies(),
           // if (!hasInternetConnection)
           //   InterNetExceptionWidget(
@@ -144,9 +157,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
             case Status.loading:
               return const Center(child: LoadingWidget());
 
-             case Status.error:
-              if (state.trendingMoviesList.message == "No Internet Connection") {
-               return InterNetExceptionWidget(
+            case Status.error:
+              if (state.trendingMoviesList.message ==
+                  "No Internet Connection") {
+                return InterNetExceptionWidget(
                   onPress: () =>
                       trendingMoviesBloc.add(const FetchTrendingMoviesEvent()),
                 );
@@ -198,8 +212,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             case Status.loading:
               return const Center(child: LoadingWidget());
 
-           case Status.error:
-              if (state.upcomingMoviesList.message == "No Internet Connection") {
+            case Status.error:
+              if (state.upcomingMoviesList.message ==
+                  "No Internet Connection") {
                 return InterNetExceptionWidget(
                   onPress: () =>
                       upcomingMoviesBloc.add(const FetchUpcomingMoviesEvent()),
@@ -207,9 +222,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
               }
               return Center(
                 child: Text(state.upcomingMoviesList.message.toString()),
+                
               );
 
             case Status.completed:
+           final upcomingMoviesData = state.upcomingMoviesList.data;
+            if (upcomingMoviesData == null || 
+                upcomingMoviesData.results.isEmpty) {
+              return const Center(child: Text('No upcoming movies available.'));
+            }
               return CarouselSlider(
                 options: CarouselOptions(
                   height: MediaQuery.of(context).size.height * .41,
@@ -240,13 +261,3 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-

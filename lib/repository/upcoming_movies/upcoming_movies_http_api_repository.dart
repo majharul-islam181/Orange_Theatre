@@ -8,7 +8,7 @@ class UpcomingMoviesHttpApiRepository extends UpcomingMoviesRepository {
 
   @override
   Future<UpcomingMoviesModel> fetchUpcomingMoviesList() async{
-    final String endpoint = AppUrl.popularMoviesList;
+    final String endpoint = AppUrl.upComingMoviesList;
     final response = await _apiServices.getApi(endpoint);
 
     return UpcomingMoviesModel.fromJson(response);
