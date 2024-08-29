@@ -27,7 +27,7 @@ class FeatureItem extends StatelessWidget {
       child: Container(
         width: width,
         height: height,
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(2),
         margin: const EdgeInsets.symmetric(vertical: 5),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -37,16 +37,16 @@ class FeatureItem extends StatelessWidget {
               color: AppColor.shadowColor.withOpacity(0.1),
               spreadRadius: 1,
               blurRadius: 1,
-              offset: const Offset(1, 1), 
+              offset: const Offset(1, 1),
             ),
           ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildImage(), 
-            const SizedBox(height: 2), 
-            _buildText(), 
+            _buildImage(),
+            const SizedBox(height: 2),
+            _buildText(),
           ],
         ),
       ),
@@ -61,7 +61,7 @@ class FeatureItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildName(),
-          const SizedBox(height: 2), 
+          const SizedBox(height: 2),
           _buildInfo(),
         ],
       ),
@@ -70,7 +70,7 @@ class FeatureItem extends StatelessWidget {
 
   Widget _buildName() {
     return Text(
-      data.originalTitle, 
+      data.originalTitle,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       style: GoogleFonts.poppins(
@@ -88,17 +88,13 @@ class FeatureItem extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-                'Releas Date: ${data.releaseDate}', 
+            Text('Releas Date: ${data.releaseDate}',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.poppins(
                   color: AppColor.labelColor,
                   fontSize: 13,
-                )
-
-        
-                ),
+                )),
             Row(
               children: [
                 Text(
@@ -108,7 +104,7 @@ class FeatureItem extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  data.genreIds.join(', '), 
+                  data.genreIds.join(', '),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
@@ -127,9 +123,9 @@ class FeatureItem extends StatelessWidget {
 
   Widget _buildImage() {
     return CustomImage(
-      '$imageUrl${data.posterPath}', 
+      '$imageUrl${data.posterPath}',
       width: double.infinity,
-      height: 220, 
+      height: 235,
       radius: 15,
     );
   }

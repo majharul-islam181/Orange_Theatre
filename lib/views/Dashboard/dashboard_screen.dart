@@ -103,7 +103,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
           ),
-          _buildCities(),
+          // _buildCities(),
           const SizedBox(
             height: 15,
           ),
@@ -148,7 +148,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             case Status.completed:
               return CarouselSlider(
                 options: CarouselOptions(
-                  height: MediaQuery.of(context).size.height * .4,
+                  height: MediaQuery.of(context).size.height * .41,
                   enlargeCenterPage: true,
                   disableCenter: true,
                   viewportFraction: .75,
