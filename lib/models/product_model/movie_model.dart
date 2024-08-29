@@ -1,11 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'product_model.freezed.dart';
-part 'product_model.g.dart';
+part 'movie_model.freezed.dart';
+part 'movie_model.g.dart';
 
 @freezed
-class ProductModel with _$ProductModel {
-  factory ProductModel({
+class MovieModel with _$MovieModel {
+  factory MovieModel({
     @Default(false) @JsonKey(name: 'adult') bool adult,
     @Default('') @JsonKey(name: 'backdrop_path') String backdropPath,
     @Default(0) @JsonKey(name: 'budget') int budget,
@@ -31,10 +31,10 @@ class ProductModel with _$ProductModel {
     @Default(false) @JsonKey(name: 'video') bool video,
     @Default(0.0) @JsonKey(name: 'vote_average') double voteAverage,
     @Default(0) @JsonKey(name: 'vote_count') int voteCount,
-  }) = _ProductModel;
+  }) = _MovieModel;
 
-  factory ProductModel.fromJson(Map<String, dynamic> json) =>
-      _$ProductModelFromJson(json);
+  factory MovieModel.fromJson(Map<String, dynamic> json) =>
+      _$MovieModelFromJson(json);
 }
 
 @freezed

@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'product_model.dart';
+part of 'movie_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ProductModelImpl _$$ProductModelImplFromJson(Map<String, dynamic> json) =>
-    _$ProductModelImpl(
+_$MovieModelImpl _$$MovieModelImplFromJson(Map<String, dynamic> json) =>
+    _$MovieModelImpl(
       adult: json['adult'] as bool? ?? false,
       backdropPath: json['backdrop_path'] as String? ?? '',
       budget: (json['budget'] as num?)?.toInt() ?? 0,
@@ -52,7 +52,7 @@ _$ProductModelImpl _$$ProductModelImplFromJson(Map<String, dynamic> json) =>
       voteCount: (json['vote_count'] as num?)?.toInt() ?? 0,
     );
 
-Map<String, dynamic> _$$ProductModelImplToJson(_$ProductModelImpl instance) =>
+Map<String, dynamic> _$$MovieModelImplToJson(_$MovieModelImpl instance) =>
     <String, dynamic>{
       'adult': instance.adult,
       'backdrop_path': instance.backdropPath,
