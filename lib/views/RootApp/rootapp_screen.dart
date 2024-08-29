@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:orange_theatre/config/colors/color.dart';
 import 'package:orange_theatre/utils/constant.dart';
-import 'package:orange_theatre/views/Dashboard/dashboard1.dart';
 import 'package:orange_theatre/views/widgets/bottombar_item.dart';
 import '../views.dart';
 
@@ -19,7 +18,7 @@ class _RootAppState extends State<RootApp> with TickerProviderStateMixin {
   final List _barItems = [
     {
       "icon": "assets/icons/home.svg",
-      "page": const Dashboard1(),
+      "page": const DashboardScreen(),
     },
     {
       "icon": "assets/icons/search copy.svg",
