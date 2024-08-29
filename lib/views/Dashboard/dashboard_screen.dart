@@ -2,14 +2,14 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:orange_theatre/bloc/trending_movies_bloc/trending_movies_bloc.dart';
+import 'package:orange_theatre/bloc/upcoming_movies_bloc/upcoming_movies_bloc.dart';
 import 'package:orange_theatre/config/colors/color.dart';
 import 'package:orange_theatre/config/components/internet_exception_widget.dart';
 import 'package:orange_theatre/config/components/loading_widget.dart';
 import 'package:orange_theatre/main.dart';
-import 'package:orange_theatre/utils/data.dart';
 import 'package:orange_theatre/utils/enums.dart';
-import 'package:orange_theatre/views/widgets/city_item.dart';
-import 'package:orange_theatre/views/widgets/feature_item.dart';
+import 'package:orange_theatre/views/widgets/top_trending_item.dart';
+import 'package:orange_theatre/views/widgets/top_upcoming_item.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -20,17 +20,21 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   late TrendingMoviesBloc trendingMoviesBloc;
+  late UpcomingMoviesBloc upcomingMoviesBloc;
+  bool hasInternetConnection = true;
 
   @override
   void initState() {
     super.initState();
     trendingMoviesBloc = TrendingMoviesBloc(trendingMoviesRepository: getIt());
+    upcomingMoviesBloc = UpcomingMoviesBloc(upcomingMoviesRepository: getIt());
   }
 
   @override
   void dispose() {
     super.dispose();
     trendingMoviesBloc.close();
+    upcomingMoviesBloc.close();
   }
 
   @override
@@ -107,16 +111,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
           const SizedBox(
             height: 15,
           ),
-          _buildFeatured(),
+          _topTrendingMovies(),
           const SizedBox(
             height: 10,
           ),
+          _topUpcomingMovies(),
+          // if (!hasInternetConnection)
+          //   InterNetExceptionWidget(
+          //     onPress: () {
+          //       trendingMoviesBloc.add(const FetchTrendingMoviesEvent());
+          //       upcomingMoviesBloc.add(const FetchUpcomingMoviesEvent());
+
+          //       setState(() {
+          //         hasInternetConnection = true;
+          //       });
+          //     },
+          //   ),
         ],
       ),
     );
   }
 
-  _buildFeatured() {
+  _topTrendingMovies() {
     return BlocProvider(
       create: (context) => trendingMoviesBloc
         ..add(
@@ -128,21 +144,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
             case Status.loading:
               return const Center(child: LoadingWidget());
 
-            case Status.error:
-              if (state.trendingMoviesList.message ==
-                  "No Internet Connection") {
-                return InterNetExceptionWidget(
+             case Status.error:
+              if (state.trendingMoviesList.message == "No Internet Connection") {
+               return InterNetExceptionWidget(
                   onPress: () =>
                       trendingMoviesBloc.add(const FetchTrendingMoviesEvent()),
                 );
               }
               return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(state.trendingMoviesList.message.toString()),
-                  ],
-                ),
+                child: Text(state.trendingMoviesList.message.toString()),
               );
 
             case Status.completed:
@@ -156,7 +166,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 items: List.generate(
                   state.trendingMoviesList.data!.results.length,
-                  (index) => FeatureItem(
+                  (index) => TopTrendingItem(
                     data: state.trendingMoviesList.data!.results[index],
                     // onTapFavorite: () {
                     //   setState(() {
@@ -176,21 +186,67 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  _buildCities() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(15, 5, 0, 10),
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: List.generate(
-          cities.length,
-          (index) => Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: CityItem(
-              data: cities[index],
-            ),
-          ),
+  _topUpcomingMovies() {
+    return BlocProvider(
+      create: (context) => upcomingMoviesBloc
+        ..add(
+          const FetchUpcomingMoviesEvent(),
         ),
+      child: BlocBuilder<UpcomingMoviesBloc, UpcomingMoviesState>(
+        builder: (context, state) {
+          switch (state.upcomingMoviesList.status) {
+            case Status.loading:
+              return const Center(child: LoadingWidget());
+
+           case Status.error:
+              if (state.upcomingMoviesList.message == "No Internet Connection") {
+                return InterNetExceptionWidget(
+                  onPress: () =>
+                      upcomingMoviesBloc.add(const FetchUpcomingMoviesEvent()),
+                );
+              }
+              return Center(
+                child: Text(state.upcomingMoviesList.message.toString()),
+              );
+
+            case Status.completed:
+              return CarouselSlider(
+                options: CarouselOptions(
+                  height: MediaQuery.of(context).size.height * .41,
+                  enlargeCenterPage: true,
+                  disableCenter: true,
+                  viewportFraction: .75,
+                  autoPlay: false,
+                ),
+                items: List.generate(
+                  state.upcomingMoviesList.data!.results.length,
+                  (index) => TopUpcomingItem(
+                    data: state.upcomingMoviesList.data!.results[index],
+                    // onTapFavorite: () {
+                    //   setState(() {
+                    //     state.trendingMoviesList.data[index]["is_favorited"] =
+                    //         !state.trendingMoviesList.data[index]["is_favorited"];
+                    //   });
+                    // },
+                  ),
+                ),
+              );
+
+            default:
+              return const SizedBox.shrink();
+          }
+        },
       ),
     );
   }
 }
+
+
+
+
+
+
+
+
+
+

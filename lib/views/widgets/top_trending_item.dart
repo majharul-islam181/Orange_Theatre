@@ -4,8 +4,8 @@ import 'package:orange_theatre/models/trending_movies/trending_movies_model.dart
 import '../../config/colors/color.dart';
 import 'custom_image.dart';
 
-class FeatureItem extends StatelessWidget {
-  const FeatureItem({
+class TopTrendingItem extends StatelessWidget {
+  const TopTrendingItem({
     super.key,
     required this.data,
     this.width = 280,

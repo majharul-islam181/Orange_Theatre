@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:orange_theatre/repository/trending_movies/trending_movies_http_api_repository.dart';
-import 'package:orange_theatre/repository/trending_movies/trending_movies_repository.dart';
+import 'repository/repository.dart';
 import 'views/views.dart';
 
 //Depency Injection
@@ -31,4 +30,6 @@ class MyApp extends StatelessWidget {
 void servicesLocator() {
   getIt.registerLazySingleton<TrendingMoviesRepository>(
       () => TrendingMoviesHttpApiRepository());
+  getIt.registerLazySingleton<UpcomingMoviesRepository>(
+      () => UpcomingMoviesHttpApiRepository());
 }
