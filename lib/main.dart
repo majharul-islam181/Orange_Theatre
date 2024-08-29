@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:orange_theatre/views/RootApp/rootapp_screen.dart';
+import 'views/views.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const RootAppScreen(),
+      home: const RootApp(),
     );
   }
 }

@@ -1,10 +1,5 @@
 class AppUrl {
-  static String baseUrl = 'http://localhost:8011';
-  // http://localhost:8011
-  // http://192.168.0.105:8011
-  static String loginApi = '$baseUrl/api/v1/auth/login';
-  static String allRooms = '$baseUrl/api/v1/room/getAll';
-  static String productScreen = '$baseUrl/api/v1/room/findRoom';
-  static String reservationScreen = '$baseUrl/api/v1/reservation/create';
-    static String reservationList = '$baseUrl/api/v1/reservation/getReservationByUser';
+  static String baseUrl = 'https://api.themoviedb.org/3';
+  static const String _apiKey = "a07cd01daacf6d442859ea265542f754";
+  static String popularMoviesList = '$baseUrl/movie/popular?api_key=$_apiKey';
 }
