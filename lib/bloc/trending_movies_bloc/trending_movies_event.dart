@@ -1,6 +1,7 @@
 part of 'trending_movies_bloc.dart';
 
 abstract class TrendingMoviesEvent extends Equatable {
+
   const TrendingMoviesEvent();
 
   @override
@@ -8,12 +9,12 @@ abstract class TrendingMoviesEvent extends Equatable {
 }
 
 class FetchTrendingMoviesEvent extends TrendingMoviesEvent {
-
-  const FetchTrendingMoviesEvent();
+  final int page;
+  const FetchTrendingMoviesEvent({this.page=1});
 
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [page];
 
 
 }

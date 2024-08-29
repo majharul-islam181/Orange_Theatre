@@ -8,6 +8,7 @@ import 'package:orange_theatre/bloc/trending_movies_bloc/trending_movies_bloc.da
 import 'package:orange_theatre/config/components/loading_widget.dart';
 import 'package:orange_theatre/utils/enums.dart';
 import 'package:orange_theatre/views/explore/widgets/explore_widget.dart';
+
 import '../../config/colors/color.dart';
 import '../../config/components/internet_exception_widget.dart';
 import '../../main.dart';
@@ -27,6 +28,7 @@ class _ExploreRootState extends State<ExploreRoot> {
   double? minPrice;
   double? maxPrice;
   bool isAvailable = false;
+  int? movieLength;
 
   final List<String> locations = ["Bangladesh"];
 
@@ -34,6 +36,7 @@ class _ExploreRootState extends State<ExploreRoot> {
   void initState() {
     super.initState();
     trendingMoviesBloc = TrendingMoviesBloc(trendingMoviesRepository: getIt());
+    trendingMoviesBloc.add(const FetchTrendingMoviesEvent());
     minPrice = 0; // Set your default minimum price
     maxPrice = 1000; // Set your default maximum price
   }
@@ -83,6 +86,9 @@ class _ExploreRootState extends State<ExploreRoot> {
                         );
 
                       case Status.completed:
+                        if (kDebugMode) {
+                          print('api called success');
+                        }
                         final movieList = state.trendingMoviesList.data!;
                         final filteredMovie = movieList.results.where((movie) {
                           return movie.title
@@ -94,10 +100,10 @@ class _ExploreRootState extends State<ExploreRoot> {
                           itemCount: filteredMovie.length,
                           itemBuilder: (context, index) {
                             final movie = filteredMovie[index];
-                            // Construct the full image URL using the base URL and poster path
+
                             final imageUrl = movie.posterPath.isNotEmpty
                                 ? "https://image.tmdb.org/t/p/w500${movie.posterPath}"
-                                : ''; // Adjust the URL based on the movie's poster_path
+                                : '';
 
                             return GestureDetector(
                               onTap: () {
@@ -120,10 +126,8 @@ class _ExploreRootState extends State<ExploreRoot> {
                                 releaseDate: movie
                                     .releaseDate, // Use the movie's release date
                                 genre: movie.genreIds.isNotEmpty
-                                    ? movie.genreIds
-                                        .map((id) => getGenreById(id))
-                                        .join(', ')
-                                    : '', // Assuming you have a method to get genre names by IDs
+                                    ? movie.genreIds.join(', ')
+                                    : '',
                               ),
                             );
                           },
@@ -136,33 +140,29 @@ class _ExploreRootState extends State<ExploreRoot> {
                 ),
               ),
             ),
+            // TextButton(
+            //   onPressed: () {},
+            //   child: const Text('retab'),
+            // ),
           ],
         ),
       ),
     );
   }
 
-  String getGenreById(int id) {
-    // Assuming you have a predefined mapping of genre IDs to names
-    const genreMap = {
-      28: 'Action',
-      12: 'Adventure',
-      16: 'Animation',
-      // Add more genres as needed
-    };
-    return genreMap[id] ?? 'Unknown';
-  }
-
   Widget getAppBar() {
     return Container(
       child: const Row(
         children: [
-          Text(
-            'Explore',
-            style: TextStyle(
-              color: AppColor.textColor,
-              fontWeight: FontWeight.w600,
-              fontSize: 24,
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'Explore Movies',
+              style: TextStyle(
+                color: AppColor.textColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 20,
+              ),
             ),
           ),
         ],
@@ -234,28 +234,6 @@ class _ExploreRootState extends State<ExploreRoot> {
       ),
     );
   }
-
-  // int selectedCategoryIndex = 0;
-  // Widget getCategories() {
-  //   return SingleChildScrollView(
-  //     scrollDirection: Axis.horizontal,
-  //     padding: const EdgeInsets.only(left: 15, top: 10, bottom: 5),
-  //     child: Row(
-  //       children: List.generate(
-  //         categories.length,
-  //         (index) => CategoryItem(
-  //           onTap: () {
-  //             setState(() {
-  //               selectedCategoryIndex = index;
-  //             });
-  //           },
-  //           isActive: selectedCategoryIndex == index,
-  //           data: categories[index],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   // Function to show the filter bottom sheet
   void _showFilterBottomSheet() {

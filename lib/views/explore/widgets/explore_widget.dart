@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, avoid_types_as_parameter_names
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -56,12 +56,7 @@ class ExploreWidget extends StatelessWidget {
                 imageUrl: imageUrl.toString(),
               ),
             ),
-            //  Positioned(
-            //   top: 165,
-            //   right: 15,
-            //   child: BookmarkBox(onTap: onBookmark, isBookmarked: data['is_favorited'],),
 
-            // ),
             //attribute
             Positioned(
                 top: 215,
@@ -85,14 +80,10 @@ class ExploreWidget extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          getAttribute(Icons.sell_outlined, releaseDate.toString(),
-                              AppColor.labelColor),
-                          getAttribute(Icons.play_circle_outline, "session",
-                              AppColor.labelColor),
-                          getAttribute(Icons.schedule_outlined, "duration",
-                              AppColor.labelColor),
+                          getAttribute(Icons.date_range_outlined,
+                              releaseDate.toString(), AppColor.labelColor),
                           getAttribute(
-                              Icons.star, genre.toString(), AppColor.yellow),
+                              Icons.star, genre.toString(), AppColor.red),
                         ],
                       )
                     ],
