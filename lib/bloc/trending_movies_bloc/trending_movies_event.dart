@@ -8,12 +8,12 @@ abstract class TrendingMoviesEvent extends Equatable {
 }
 
 class FetchTrendingMoviesEvent extends TrendingMoviesEvent {
-  final String movieId;
-  const FetchTrendingMoviesEvent({required this.movieId});
+
+  const FetchTrendingMoviesEvent();
 
 
   @override
-  List<Object?> get props => [movieId];
+  List<Object?> get props => [];
 
 
 }

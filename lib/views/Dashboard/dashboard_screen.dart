@@ -1,6 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:orange_theatre/bloc/trending_movies_bloc/trending_movies_bloc.dart';
+import 'package:orange_theatre/main.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -10,6 +12,14 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  late TrendingMoviesBloc trendingMoviesBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    trendingMoviesBloc = TrendingMoviesBloc(trendingMoviesRepository: getIt());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -21,7 +21,7 @@ class TrendingMoviesBloc
 
     try {
       final trendingList =
-          await trendingMoviesRepository.fetchTrendingMoviesList(event.movieId);
+          await trendingMoviesRepository.fetchTrendingMoviesList();
       emit(state.copyWith(
           trendingMoviesList: ApiResponse.completed(trendingList)));
     } catch (error) {
