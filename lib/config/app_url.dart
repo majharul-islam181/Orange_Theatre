@@ -4,4 +4,5 @@ class AppUrl {
   static String popularMoviesList = '$baseUrl/popular?api_key=$_apiKey';
   static String upComingMoviesList = '$baseUrl/upcoming?api_key=$_apiKey';
   static String productScreen = '$baseUrl/{movieId}?api_key=$_apiKey';
+  static String imageBaseUrl = "https://image.tmdb.org/t/p/w500";
 }

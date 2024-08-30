@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,7 +22,7 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
 
     try {
       final moviesDetails =
-          await movieDetailsRepository.fetchMovieDetails(int.parse(event.movieId));
+          await movieDetailsRepository.fetchMovieDetails(event.movieId);
       emit(state.copyWith(movieDetails: ApiResponse.completed(moviesDetails)));
     } catch (error) {
       emit(state.copyWith(movieDetails: ApiResponse.error(error.toString())));
