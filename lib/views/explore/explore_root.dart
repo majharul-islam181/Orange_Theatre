@@ -7,6 +7,7 @@ import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:orange_theatre/bloc/trending_movies_bloc/trending_movies_bloc.dart';
 import 'package:orange_theatre/config/components/loading_widget.dart';
 import 'package:orange_theatre/utils/enums.dart';
+import 'package:orange_theatre/views/Movie-Screen/movie_screen.dart';
 import 'package:orange_theatre/views/explore/widgets/explore_widget.dart';
 
 import '../../config/colors/color.dart';
@@ -109,15 +110,15 @@ class _ExploreRootState extends State<ExploreRoot> {
                               onTap: () {
                                 if (kDebugMode) {
                                   print(
-                                      "Movie ID: ${movie.id}"); // Print the movie ID for debugging
+                                      "Movie ID: ${movie.id}"); 
                                 }
-                                // Uncomment and modify the navigation as needed
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //     builder: (context) => MovieDetailScreen(movieId: movie.id),
-                                //   ),
-                                // );
+                               
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MovieScreen(movieId: movie.id),
+                                  ),
+                                );
                               },
                               child: ExploreWidget(
                                 imageUrl: imageUrl,

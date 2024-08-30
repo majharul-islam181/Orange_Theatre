@@ -1,10 +1,12 @@
 
 import 'package:flutter/material.dart';
+import 'package:orange_theatre/views/Movie-Screen/movie_screen.dart';
 
 import 'routes_name.dart';
 
 class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
+    final int movieId = settings.arguments as int;
     switch (settings.name) {
       // case RoutesName.splashScreen:
       //   return MaterialPageRoute(
@@ -42,10 +44,9 @@ class Routes {
       //   return MaterialPageRoute(
       //       builder: (BuildContext context) => const AllBookingsScreen());
 
-// PendingRequest
-      //  case RoutesName.loginScreen:
-      //   return MaterialPageRoute(
-      //       builder: (BuildContext context) => const ProductScreen(roomId: '',));
+       case RoutesName.movieScreenDetails:
+        return MaterialPageRoute(
+            builder: (BuildContext context) =>  MovieScreen(movieId: movieId));
 
       default:
         return MaterialPageRoute(builder: (_) {

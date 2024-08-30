@@ -10,7 +10,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../widgets.dart';
 
 class MovieScreen extends StatefulWidget {
-  const MovieScreen({super.key});
+  final int movieId;
+   MovieScreen({super.key, required this.movieId});
 
   @override
   State<MovieScreen> createState() => _MovieScreenState();
@@ -19,7 +20,7 @@ class MovieScreen extends StatefulWidget {
 //533535 movie id
 class _MovieScreenState extends State<MovieScreen> {
   late MovieDetailsBloc movieDetailsBloc;
-  int movieId = 533536;
+
   @override
   void initState() {
     super.initState();
@@ -39,7 +40,7 @@ class _MovieScreenState extends State<MovieScreen> {
     return Scaffold(
         body: BlocProvider(
       create: (context) =>
-          movieDetailsBloc..add(FetchMovieDetailsEvent(movieId)),
+          movieDetailsBloc..add(FetchMovieDetailsEvent(widget.movieId)),
       child: BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
           builder: (context, state) {
         switch (state.movieDetails.status) {
@@ -50,7 +51,7 @@ class _MovieScreenState extends State<MovieScreen> {
             if (state.movieDetails.message == "No Internet Connection") {
               return InterNetExceptionWidget(
                 onPress: () =>
-                    movieDetailsBloc..add(FetchMovieDetailsEvent(movieId)),
+                    movieDetailsBloc..add(FetchMovieDetailsEvent(widget.movieId)),
               );
             }
             return Center(
