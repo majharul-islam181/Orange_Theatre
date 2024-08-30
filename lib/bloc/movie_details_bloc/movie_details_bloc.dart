@@ -1,11 +1,8 @@
-import 'dart:ffi';
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../data/response/api_response.dart';
 import '../../models/novie_model/movie_model.dart';
-import '../../repository/repository.dart';
+import '../../repository/movie_details/movie_repository.dart';
 part 'movie_details_state.dart';
 part 'movie_details_event.dart';
 

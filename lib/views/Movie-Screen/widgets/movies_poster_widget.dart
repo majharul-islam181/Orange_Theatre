@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:orange_theatre/config/app_url.dart';
 
@@ -8,7 +10,7 @@ class MoviesPosterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.35,
+      height: MediaQuery.of(context).size.height * 0.4,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.only(

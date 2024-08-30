@@ -1,15 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:orange_theatre/bloc/trending_movies_bloc/trending_movies_bloc.dart';
-import 'package:orange_theatre/bloc/upcoming_movies_bloc/upcoming_movies_bloc.dart';
 import 'package:orange_theatre/config/colors/color.dart';
-import 'package:orange_theatre/config/components/internet_exception_widget.dart';
-import 'package:orange_theatre/config/components/loading_widget.dart';
 import 'package:orange_theatre/main.dart';
 import 'package:orange_theatre/utils/enums.dart';
-import 'package:orange_theatre/views/widgets/top_trending_item.dart';
-import 'package:orange_theatre/views/widgets/top_upcoming_item.dart';
+import '../../bloc/bloc.dart';
+import '../widgets.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});

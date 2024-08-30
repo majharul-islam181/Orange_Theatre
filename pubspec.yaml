@@ -50,6 +50,7 @@ dependencies:
   get_it: ^7.7.0
   cached_network_image: ^3.4.1
   liquid_pull_to_refresh: ^3.0.1
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:
