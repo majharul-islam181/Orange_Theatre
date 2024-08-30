@@ -7,3 +7,10 @@ export 'package:orange_theatre/views/Movie-Screen/widgets/movies_title_widget.da
 export 'package:orange_theatre/views/Movie-Screen/widgets/release_revenue_popularity_widget.dart';
 export 'package:orange_theatre/views/widgets/top_trending_item.dart';
 export 'package:orange_theatre/views/widgets/top_upcoming_item.dart';
+export 'package:orange_theatre/views/Movie-Screen/widgets/back_button_widget.dart';
+export 'package:orange_theatre/views/Movie-Screen/widgets/budget_widget.dart';
+export 'package:orange_theatre/views/Movie-Screen/widgets/origin_country_widget.dart';
+export 'package:orange_theatre/views/Movie-Screen/widgets/original_language_widget.dart';
+export 'package:orange_theatre/views/Movie-Screen/widgets/production_countries_widget.dart';
+export 'package:orange_theatre/views/Movie-Screen/widgets/spoken_language_widget.dart';
+export 'package:orange_theatre/views/Movie-Screen/widgets/video_bool_widget.dart';

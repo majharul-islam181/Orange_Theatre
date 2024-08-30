@@ -11,7 +11,7 @@ class MoviesRatingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-        top: MediaQuery.of(context).size.height * .3,
+        top: MediaQuery.of(context).size.height * .35,
         right: 16,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(40),
