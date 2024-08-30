@@ -82,3 +82,5 @@ class SpokenLanguage with _$SpokenLanguage {
   factory SpokenLanguage.fromJson(Map<String, dynamic> json) =>
       _$SpokenLanguageFromJson(json);
 }
+
+

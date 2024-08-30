@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:orange_theatre/config/app_url.dart';
-import 'package:orange_theatre/models/novie_model/movie_model.dart';
+import 'package:orange_theatre/models/movie_model/movie_model.dart';
 
 // class ProductionCompanywidget extends StatelessWidget {
 

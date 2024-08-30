@@ -4,8 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:orange_theatre/bloc/movie_details_bloc/movie_details_bloc.dart';
 import 'package:orange_theatre/config/app_url.dart';
 import 'package:orange_theatre/main.dart';
+import 'package:orange_theatre/services/favourite_services/favourite_movie_services.dart';
 import 'package:orange_theatre/utils/enums.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../models/models.dart';
 import '../widgets.dart';
 
 class MovieScreen extends StatefulWidget {
@@ -16,14 +18,27 @@ class MovieScreen extends StatefulWidget {
   State<MovieScreen> createState() => _MovieScreenState();
 }
 
-//533535 movie id
 class _MovieScreenState extends State<MovieScreen> {
   late MovieDetailsBloc movieDetailsBloc;
+  late Future<List<Movie>> favoritesFuture;
+  final FavoriteMoviesService favoriteMoviesService = FavoriteMoviesService();
+  late List<Movie> favorites;
 
   @override
   void initState() {
     super.initState();
     movieDetailsBloc = MovieDetailsBloc(movieDetailsRepository: getIt());
+    favoritesFuture = favoriteMoviesService.loadFavorites();
+  }
+
+  Future<void> toggleFavorite(Movie movie) async {
+    if (favorites.contains(movie)) {
+      favorites.remove(movie);
+    } else {
+      favorites.add(movie);
+    }
+    await favoriteMoviesService.saveFavorites(favorites);
+    setState(() {});
   }
 
   Future<void> _launchURL(String url) async {
@@ -45,7 +60,6 @@ class _MovieScreenState extends State<MovieScreen> {
         switch (state.movieDetails.status) {
           case Status.loading:
             return const Center(child: LoadingWidget());
-
           case Status.error:
             if (state.movieDetails.message == "No Internet Connection") {
               return InterNetExceptionWidget(
@@ -80,19 +94,24 @@ class _MovieScreenState extends State<MovieScreen> {
                       Positioned(
                           top: MediaQuery.of(context).size.height * .07,
                           right: 30,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: Container(
-                                height: 30,
-                                width: 30,
-                                decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2)),
-                                child: const Center(
-                                    child: Icon(
-                                  Icons.favorite_rounded,
-                                  color: Colors.white,
-                                ))),
-                          )),
+                          child: GestureDetector(
+                            onTap: () {
+                              print('clicked');
+                            },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Container(
+                                  height: 30,
+                                  width: 30,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.2)),
+                                  child: const Center(
+                                      child: Icon(
+                                    Icons.favorite_rounded,
+                                    color: Colors.white,
+                                  ))),
+                            ),
+                          ),),
                       const BackButtonWidget(),
                     ],
                   ),
