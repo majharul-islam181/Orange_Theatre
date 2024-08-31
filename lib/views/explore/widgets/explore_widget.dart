@@ -9,20 +9,20 @@ class ExploreWidget extends StatelessWidget {
   final String? releaseDate;
   final String? genre;
 
-  ExploreWidget({
+  const ExploreWidget({
     required this.imageUrl,
     required this.movieTitle,
     required this.releaseDate,
     required this.genre,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
+      padding: const EdgeInsets.only(top: 5, left: 15, right: 15),
       child: Container(
-        width: double.infinity, // Use full width of the parent
+        width: double.infinity,
         height: MediaQuery.of(context).size.height * .34,
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.only(top: 5, bottom: 5),
@@ -43,7 +43,7 @@ class ExploreWidget extends StatelessWidget {
             // Image placeholder
             SizedBox(
               width: double.infinity,
-              height: 200,
+              height: MediaQuery.of(context).size.height * .24,
               child: CachedNetworkImage(
                 imageUrl: imageUrl ?? '',
                 placeholder: (context, url) => const Center(
@@ -63,7 +63,7 @@ class ExploreWidget extends StatelessWidget {
             ),
             // Movie attributes
             Positioned(
-              top: 215,
+              top: MediaQuery.of(context).size.height * .25,
               child: SizedBox(
                 width: MediaQuery.of(context).size.width - 50,
                 child: Column(
@@ -120,5 +120,3 @@ class ExploreWidget extends StatelessWidget {
     );
   }
 }
-
-

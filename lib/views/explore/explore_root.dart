@@ -38,8 +38,8 @@ class _ExploreRootState extends State<ExploreRoot> {
     super.initState();
     trendingMoviesBloc = TrendingMoviesBloc(trendingMoviesRepository: getIt());
     trendingMoviesBloc.add(const FetchTrendingMoviesEvent());
-    minPrice = 0; // Set your default minimum price
-    maxPrice = 1000; // Set your default maximum price
+    minPrice = 0;
+    maxPrice = 1000; 
   }
 
   @override
