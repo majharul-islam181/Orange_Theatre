@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:orange_theatre/bloc/genre_bloc/genre_bloc.dart';
 import 'package:orange_theatre/bloc/trending_movies_bloc/trending_movies_bloc.dart';
+import 'package:orange_theatre/models/genre_model/genres_model.dart';
+import 'package:orange_theatre/utils/constant.dart';
 import 'package:orange_theatre/utils/enums.dart';
 import 'package:orange_theatre/views/Movie-Screen/movie_screen.dart';
 import '../../config/colors/color.dart';
@@ -36,7 +39,7 @@ class _ExploreRootState extends State<ExploreRoot> {
     trendingMoviesBloc = TrendingMoviesBloc(trendingMoviesRepository: getIt());
     trendingMoviesBloc.add(const FetchTrendingMoviesEvent());
     minPrice = 0;
-    maxPrice = 1000; 
+    maxPrice = 1000;
   }
 
   @override
@@ -51,12 +54,16 @@ class _ExploreRootState extends State<ExploreRoot> {
       appBar: AppBar(
         title: getAppBar(),
       ),
-      body: BlocProvider(
-        create: (context) => trendingMoviesBloc,
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) => trendingMoviesBloc),
+          BlocProvider(
+              create: (context) => GenreBloc(genreRepository: getIt())
+                ..add(const FetchGenreEvent())),
+        ],
         child: Column(
           children: [
             getSearchBox(),
-            // getCategories(),
             const SizedBox(height: 4),
             Expanded(
               child: LiquidPullToRefresh(
@@ -79,13 +86,12 @@ class _ExploreRootState extends State<ExploreRoot> {
                           );
                         }
                         return Center(
-                          child:
-                              Text(state.trendingMoviesList.message.toString()),
-                        );
+                            child: Text(
+                                state.trendingMoviesList.message.toString()));
 
                       case Status.completed:
                         if (kDebugMode) {
-                          print('api called success');
+                          print('API called successfully');
                         }
                         final movieList = state.trendingMoviesList.data!;
                         final filteredMovie = movieList.results.where((movie) {
@@ -106,26 +112,28 @@ class _ExploreRootState extends State<ExploreRoot> {
                             return GestureDetector(
                               onTap: () {
                                 if (kDebugMode) {
-                                  print(
-                                      "Movie ID: ${movie.id}"); 
+                                  print("Movie ID: ${movie.id}");
                                 }
-                               
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => MovieScreen(movieId: movie.id),
+                                    builder: (context) =>
+                                        MovieScreen(movieId: movie.id),
                                   ),
                                 );
                               },
                               child: ExploreWidget(
                                 imageUrl: imageUrl,
-                                movieTitle:
-                                    movie.title, // Use the movie's title
-                                releaseDate: movie
-                                    .releaseDate, // Use the movie's release date
-                                genre: movie.genreIds.isNotEmpty
-                                    ? movie.genreIds.join(', ')
-                                    : '',
+                                movieTitle: movie.title,
+                                releaseDate: movie.releaseDate,
+                                genreName: movie.genreIds.map((id) {
+                                  final genre = genresList.firstWhere(
+                                    (g) => g.id == id,
+                                    orElse: () =>
+                                        GenresModel(id: id, name: 'Unknown'),
+                                  );
+                                  return genre.name;
+                                }).join(', '),
                               ),
                             );
                           },
@@ -138,10 +146,6 @@ class _ExploreRootState extends State<ExploreRoot> {
                 ),
               ),
             ),
-            // TextButton(
-            //   onPressed: () {},
-            //   child: const Text('retab'),
-            // ),
           ],
         ),
       ),

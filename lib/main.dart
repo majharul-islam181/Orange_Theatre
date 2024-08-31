@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:orange_theatre/config/routes/routes.dart';
-import 'package:orange_theatre/views/Movie-Screen/movie_screen.dart';
+import 'package:orange_theatre/repository/genre/genre_http_api_repository.dart';
+import 'package:orange_theatre/repository/genre/genre_repository.dart';
 import 'package:orange_theatre/views/RootApp/rootapp_screen.dart';
 import 'repository/movie_details/movie_repository.dart';
 import 'repository/repository.dart';
@@ -39,4 +40,6 @@ void servicesLocator() {
       () => UpcomingMoviesHttpApiRepository());
   getIt.registerLazySingleton<MovieRepository>(
       () => MovieHttpApiRepository());
+    getIt.registerLazySingleton<GenreRepository>(
+      () => GenreHttpApiRepository());
 }

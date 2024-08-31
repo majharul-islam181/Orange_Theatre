@@ -1,19 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-
 import '../../../config/colors/color.dart';
 
 class ExploreWidget extends StatelessWidget {
   final String? imageUrl;
   final String? movieTitle;
   final String? releaseDate;
-  final String? genre;
+  final String? genreName;
 
   const ExploreWidget({
     required this.imageUrl,
     required this.movieTitle,
     required this.releaseDate,
-    required this.genre,
+    required this.genreName,
     super.key,
   });
 
@@ -23,7 +22,7 @@ class ExploreWidget extends StatelessWidget {
       padding: const EdgeInsets.only(top: 5, left: 15, right: 15),
       child: Container(
         width: double.infinity,
-        height: MediaQuery.of(context).size.height * .34,
+        height: MediaQuery.of(context).size.height * .37,
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.only(top: 5, bottom: 5),
         decoration: BoxDecoration(
@@ -87,12 +86,17 @@ class ExploreWidget extends StatelessWidget {
                           releaseDate ?? 'Unknown Date',
                           AppColor.labelColor,
                         ),
-                        getAttribute(
-                          Icons.star,
-                          genre ?? 'Unknown Genre',
-                          AppColor.red,
+                        const SizedBox(
+                          width: 10,
                         ),
                       ],
+                    ),
+                    const SizedBox(height: 5),
+                    getAttribute(
+                      Icons.star,
+                      genreName ?? 'Unknown Genre',
+                      maxLines: 1,
+                      AppColor.red,
                     ),
                   ],
                 ),
@@ -104,13 +108,15 @@ class ExploreWidget extends StatelessWidget {
     );
   }
 
-  Widget getAttribute(IconData icon, String name, Color color) {
+  Widget getAttribute(IconData icon, String name, Color color,
+      {int maxLines = 1}) {
     return Row(
       children: [
         Icon(icon, size: 10),
         const SizedBox(width: 5),
         Text(
           name,
+          maxLines: maxLines,
           style: TextStyle(
             fontSize: 13,
             color: color,
