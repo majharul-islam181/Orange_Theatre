@@ -9,7 +9,7 @@ class LoadingWidget extends StatefulWidget {
 
   const LoadingWidget({
     super.key,
-    this.size = 60,
+    this.size = 30,
   });
 
   @override
@@ -23,7 +23,9 @@ class _LoadingWidgetState extends State<LoadingWidget> {
       height: widget.size,
       width: widget.size,
       child: Platform.isAndroid
-          ? const CircularProgressIndicator(color: Colors.black)
+          ? const CupertinoActivityIndicator(
+              color: Colors.black,
+            )
           : const CupertinoActivityIndicator(
               color: Colors.black,
             ),

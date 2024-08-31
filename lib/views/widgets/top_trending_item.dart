@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:orange_theatre/config/app_url.dart';
 import 'package:orange_theatre/models/trending_movies/trending_movies_model.dart';
 import '../../config/colors/color.dart';
 import 'custom_image.dart';
@@ -10,15 +11,13 @@ class TopTrendingItem extends StatelessWidget {
     required this.data,
     this.width = 280,
     this.height = 300,
-    this.onTap,
+   required this.onTap,
   });
 
   final Movie data;
   final double width;
   final double height;
   final GestureTapCallback? onTap;
-
-  static String imageUrl = "https://image.tmdb.org/t/p/w500";
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +122,7 @@ class TopTrendingItem extends StatelessWidget {
 
   Widget _buildImage() {
     return CustomImage(
-      '$imageUrl${data.posterPath}',
+      '${AppUrl.imageBaseUrl}${data.posterPath}',
       width: double.infinity,
       height: 235,
       radius: 15,

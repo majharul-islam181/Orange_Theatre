@@ -2,8 +2,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:orange_theatre/config/colors/color.dart';
+import 'package:orange_theatre/config/routes/routes_name.dart';
 import 'package:orange_theatre/main.dart';
 import 'package:orange_theatre/utils/enums.dart';
+import 'package:orange_theatre/views/views.dart';
 import '../../bloc/bloc.dart';
 import '../widgets.dart';
 
@@ -175,17 +177,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   autoPlay: false,
                 ),
                 items: List.generate(
-                  state.trendingMoviesList.data!.results.length,
-                  (index) => TopTrendingItem(
-                    data: state.trendingMoviesList.data!.results[index],
-                    // onTapFavorite: () {
-                    //   setState(() {
-                    //     state.trendingMoviesList.data[index]["is_favorited"] =
-                    //         !state.trendingMoviesList.data[index]["is_favorited"];
-                    //   });
-                    // },
-                  ),
-                ),
+                    state.trendingMoviesList.data!.results.length, (index) {
+                  final movie = state.trendingMoviesList.data!.results[index];
+                  return TopTrendingItem(
+                      data: movie,
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    MovieScreen(movieId: movie.id)));
+                      });
+                }),
               );
 
             default:
@@ -218,15 +221,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
               }
               return Center(
                 child: Text(state.upcomingMoviesList.message.toString()),
-                
               );
 
             case Status.completed:
-           final upcomingMoviesData = state.upcomingMoviesList.data;
-            if (upcomingMoviesData == null || 
-                upcomingMoviesData.results.isEmpty) {
-              return const Center(child: Text('No upcoming movies available.'));
-            }
+              final upcomingMoviesData = state.upcomingMoviesList.data;
+              if (upcomingMoviesData == null ||
+                  upcomingMoviesData.results.isEmpty) {
+                return const Center(
+                    child: Text('No upcoming movies available.'));
+              }
               return CarouselSlider(
                 options: CarouselOptions(
                   height: MediaQuery.of(context).size.height * .41,
@@ -236,17 +239,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   autoPlay: false,
                 ),
                 items: List.generate(
-                  state.upcomingMoviesList.data!.results.length,
-                  (index) => TopUpcomingItem(
-                    data: state.upcomingMoviesList.data!.results[index],
-                    // onTapFavorite: () {
-                    //   setState(() {
-                    //     state.trendingMoviesList.data[index]["is_favorited"] =
-                    //         !state.trendingMoviesList.data[index]["is_favorited"];
-                    //   });
-                    // },
-                  ),
-                ),
+                    state.upcomingMoviesList.data!.results.length, (index) {
+                  final movie = state.upcomingMoviesList.data!.results[index];
+                  return TopUpcomingItem(
+                    data: movie,
+                    onTap: () {
+                     Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    MovieScreen(movieId: movie.id)));
+                    },
+                  );
+                }),
               );
 
             default:
