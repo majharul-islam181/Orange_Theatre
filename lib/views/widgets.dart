@@ -14,3 +14,4 @@ export 'package:orange_theatre/views/Movie-Screen/widgets/original_language_widg
 export 'package:orange_theatre/views/Movie-Screen/widgets/production_countries_widget.dart';
 export 'package:orange_theatre/views/Movie-Screen/widgets/spoken_language_widget.dart';
 export 'package:orange_theatre/views/Movie-Screen/widgets/video_bool_widget.dart';
+export 'package:orange_theatre/views/explore/widgets/explore_widget.dart';

@@ -2,7 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:orange_theatre/config/colors/color.dart';
-import 'package:orange_theatre/config/routes/routes_name.dart';
 import 'package:orange_theatre/main.dart';
 import 'package:orange_theatre/utils/enums.dart';
 import 'package:orange_theatre/views/views.dart';

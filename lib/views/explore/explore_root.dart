@@ -5,15 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:orange_theatre/bloc/trending_movies_bloc/trending_movies_bloc.dart';
-import 'package:orange_theatre/config/components/loading_widget.dart';
 import 'package:orange_theatre/utils/enums.dart';
 import 'package:orange_theatre/views/Movie-Screen/movie_screen.dart';
-import 'package:orange_theatre/views/explore/widgets/explore_widget.dart';
-
 import '../../config/colors/color.dart';
-import '../../config/components/internet_exception_widget.dart';
 import '../../main.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../widgets.dart';
 
 class ExploreRoot extends StatefulWidget {
   const ExploreRoot({super.key});
