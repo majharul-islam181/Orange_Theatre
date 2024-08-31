@@ -24,34 +24,36 @@ class MoviesTitleWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                movieTitle.toString(),
-                style: GoogleFonts.poppins(
-                    fontSize: 20, fontWeight: FontWeight.w500),
+              Expanded(
+                child: Text(
+                  movieTitle.toString(),
+                  maxLines: 1,
+                  style: GoogleFonts.poppins(
+                      fontSize: 20, fontWeight: FontWeight.w500),
+                ),
               ),
-              Container(
-                  height: MediaQuery.of(context).size.height * .04,
-                  width: MediaQuery.of(context).size.width * .25,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    // color: Colors.blueAccent,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Image.asset(
-                        'assets/icons/internet.png',
-                        height: 20,
-                        color: Colors.black,
-                      ),
-                      TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            'Visit us',
-                            style: TextStyle(fontSize: 15),
-                          )),
-                    ],
-                  ))
+              Expanded(
+                child: Container(
+                    height: MediaQuery.of(context).size.height * .04,
+                    width: MediaQuery.of(context).size.width * .25,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      // color: Colors.blueAccent,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                       
+                        TextButton(
+                            onPressed: () {},
+                            child: Image.asset(
+                              'assets/icons/internet.png',
+                              height: 20,
+                              color: Colors.black,
+                            )),
+                      ],
+                    )),
+              ),
             ],
           ),
           const SizedBox(

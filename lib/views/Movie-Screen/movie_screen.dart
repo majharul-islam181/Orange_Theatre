@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:orange_theatre/bloc/movie_details_bloc/movie_details_bloc.dart';
 import 'package:orange_theatre/config/app_url.dart';
 import 'package:orange_theatre/main.dart';
-import 'package:orange_theatre/services/favourite_services/favourite_movie_services.dart';
 import 'package:orange_theatre/utils/enums.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../models/models.dart';
@@ -20,25 +19,12 @@ class MovieScreen extends StatefulWidget {
 
 class _MovieScreenState extends State<MovieScreen> {
   late MovieDetailsBloc movieDetailsBloc;
-  late Future<List<Movie>> favoritesFuture;
-  final FavoriteMoviesService favoriteMoviesService = FavoriteMoviesService();
-  late List<Movie> favorites;
+  final Map<int, MovieModel> _movieDetailsCache = {}; 
 
   @override
   void initState() {
     super.initState();
     movieDetailsBloc = MovieDetailsBloc(movieDetailsRepository: getIt());
-    favoritesFuture = favoriteMoviesService.loadFavorites();
-  }
-
-  Future<void> toggleFavorite(Movie movie) async {
-    if (favorites.contains(movie)) {
-      favorites.remove(movie);
-    } else {
-      favorites.add(movie);
-    }
-    await favoriteMoviesService.saveFavorites(favorites);
-    setState(() {});
   }
 
   Future<void> _launchURL(String url) async {
@@ -51,7 +37,12 @@ class _MovieScreenState extends State<MovieScreen> {
 
   @override
   Widget build(BuildContext context) {
+     // Check if movie details are already cached
+    if (_movieDetailsCache.containsKey(widget.movieId)) {
+      return _buildMovieDetailsScreen(_movieDetailsCache[widget.movieId]!);
+    }
     return Scaffold(
+      
         body: BlocProvider(
       create: (context) =>
           movieDetailsBloc..add(FetchMovieDetailsEvent(widget.movieId)),
@@ -80,8 +71,22 @@ class _MovieScreenState extends State<MovieScreen> {
             if (movieDetails == null) {
               return const Center(child: Text('No details available.'));
             }
-            var productCompany = movieDetails.productionCompanies;
-            return SingleChildScrollView(
+            //cache movie details new
+          _movieDetailsCache[widget.movieId] = movieDetails;
+
+            
+            return _buildMovieDetailsScreen(movieDetails);
+
+          default:
+            return const SizedBox();
+        }
+      }),
+    ));
+  }
+
+  Widget _buildMovieDetailsScreen(MovieModel movieDetails) {
+    var productCompany = movieDetails.productionCompanies;
+    return SingleChildScrollView(
               child: Column(
                 children: [
                   Stack(
@@ -241,10 +246,6 @@ class _MovieScreenState extends State<MovieScreen> {
               ),
             );
 
-          default:
-            return const SizedBox();
-        }
-      }),
-    ));
+       
   }
 }
