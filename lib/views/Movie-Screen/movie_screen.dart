@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import 'package:orange_theatre/bloc/movie_details_bloc/movie_details_bloc.dart';
 import 'package:orange_theatre/config/app_url.dart';
 import 'package:orange_theatre/main.dart';
 import 'package:orange_theatre/utils/enums.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../models/models.dart';
 import '../widgets.dart';
@@ -21,15 +21,23 @@ class MovieScreen extends StatefulWidget {
 class _MovieScreenState extends State<MovieScreen> {
   late MovieDetailsBloc movieDetailsBloc;
   final Map<int, MovieModel> _movieDetailsCache = {};
-   bool _isFavorite = false; // Local variable to track favorite status
-
+  bool _isFavorite = false;
+  bool _isBoxOpen = false; // Flag to track if the box is open
 
   @override
   void initState() {
     super.initState();
     movieDetailsBloc = MovieDetailsBloc(movieDetailsRepository: getIt());
-    _loadFavoriteStatus(); // Load the favorite status
+    _loadFavoriteStatus();
+    _openBox();
+  }
 
+Future<void> _openBox() async {
+    if (!_isBoxOpen) { // Check if the box is already open
+      await Hive.openBox('favouritesBox');
+      _isBoxOpen = true; // Set the flag to true after opening
+      await _loadFavoriteStatus(); // Load favorite status after opening the box
+    }
   }
 
   Future<void> _launchURL(String url) async {
@@ -41,39 +49,27 @@ class _MovieScreenState extends State<MovieScreen> {
   }
 
   Future<void> _loadFavoriteStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> favorites = prefs.getStringList('favorites') ?? [];
+    var box = Hive.box('favouritesBox');
     setState(() {
-      _isFavorite = favorites.contains(widget.movieId.toString());
+      _isFavorite = box.containsKey(widget.movieId);
     });
   }
 
- Future<void> _toggleFavorite() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> favorites = prefs.getStringList('favorites') ?? [];
+  Future<void> _toggleFavorite() async {
+    var box = Hive.box('favoruitesBox');
 
     // Toggle favorite status
     if (_isFavorite) {
-      favorites.remove(widget.movieId.toString());
+      box.delete(widget.movieId);
     } else {
-      favorites.add(widget.movieId.toString());
+      box.put(widget.movieId, widget.movieId);
     }
 
-    await prefs.setStringList('favorites', favorites);
-    
     // Update local state
     setState(() {
-      _isFavorite = !_isFavorite; // Update local favorite status
+      _isFavorite = !_isFavorite;
     });
   }
-
-
-//   Future<bool> _isFavorite(int movieId) async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   List<String> favorites = prefs.getStringList('favorites') ?? [];
-//   return favorites.contains(movieId.toString());
-// }
-
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +129,7 @@ class _MovieScreenState extends State<MovieScreen> {
               MoviesLogoWidget(posterPath: movieDetails.posterPath),
               MoviesRatingWidget(
                   voteAverage: movieDetails.voteAverage.toString()),
-            Positioned(
+              Positioned(
                 top: MediaQuery.of(context).size.height * .07,
                 right: 30,
                 child: GestureDetector(
@@ -144,7 +140,10 @@ class _MovieScreenState extends State<MovieScreen> {
                       height: 30,
                       width: 30,
                       decoration: BoxDecoration(
-                        color: _isFavorite ? Colors.red : Colors.white.withOpacity(0.2), // Change color based on favorite status
+                        color: _isFavorite
+                            ? Colors.red
+                            : Colors.white.withOpacity(
+                                0.2), // Change color based on favorite status
                       ),
                       child: const Center(
                         child: Icon(
