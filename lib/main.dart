@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 import 'package:orange_theatre/config/routes/routes.dart';
 import 'package:orange_theatre/repository/genre/genre_http_api_repository.dart';
@@ -9,7 +10,10 @@ import 'repository/repository.dart';
 
 //Depency Injection
 GetIt getIt = GetIt.instance;
-void main() {
+void main() async {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await dotenv.load(fileName: ".env");
+
   servicesLocator();
   runApp(const MyApp());
 }
@@ -28,7 +32,7 @@ class MyApp extends StatelessWidget {
       ),
       onGenerateRoute: Routes.generateRoute,
       home: const RootApp(),
-      // home: const MovieScreen(),
+      // home:  NearbyTheatersScreen(),
     );
   }
 }
@@ -38,8 +42,6 @@ void servicesLocator() {
       () => TrendingMoviesHttpApiRepository());
   getIt.registerLazySingleton<UpcomingMoviesRepository>(
       () => UpcomingMoviesHttpApiRepository());
-  getIt.registerLazySingleton<MovieRepository>(
-      () => MovieHttpApiRepository());
-    getIt.registerLazySingleton<GenreRepository>(
-      () => GenreHttpApiRepository());
+  getIt.registerLazySingleton<MovieRepository>(() => MovieHttpApiRepository());
+  getIt.registerLazySingleton<GenreRepository>(() => GenreHttpApiRepository());
 }

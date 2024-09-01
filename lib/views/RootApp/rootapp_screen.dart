@@ -28,11 +28,11 @@ class _RootAppState extends State<RootApp> with TickerProviderStateMixin {
     },
     {
       "icon": "assets/icons/location.svg",
-      "page":  LocationScreen(),
+      "page":  NearbyTheatersScreen(),
     },
     {
       "icon": "assets/icons/favorite-border.svg",
-      "page": const FavouriteScreen(),
+      "page":  FavoriteScreen(),
     },
   ];
 

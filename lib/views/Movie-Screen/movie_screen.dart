@@ -5,6 +5,7 @@ import 'package:orange_theatre/bloc/movie_details_bloc/movie_details_bloc.dart';
 import 'package:orange_theatre/config/app_url.dart';
 import 'package:orange_theatre/main.dart';
 import 'package:orange_theatre/utils/enums.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../models/models.dart';
 import '../widgets.dart';
@@ -19,12 +20,16 @@ class MovieScreen extends StatefulWidget {
 
 class _MovieScreenState extends State<MovieScreen> {
   late MovieDetailsBloc movieDetailsBloc;
-  final Map<int, MovieModel> _movieDetailsCache = {}; 
+  final Map<int, MovieModel> _movieDetailsCache = {};
+   bool _isFavorite = false; // Local variable to track favorite status
+
 
   @override
   void initState() {
     super.initState();
     movieDetailsBloc = MovieDetailsBloc(movieDetailsRepository: getIt());
+    _loadFavoriteStatus(); // Load the favorite status
+
   }
 
   Future<void> _launchURL(String url) async {
@@ -35,14 +40,48 @@ class _MovieScreenState extends State<MovieScreen> {
     }
   }
 
+  Future<void> _loadFavoriteStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> favorites = prefs.getStringList('favorites') ?? [];
+    setState(() {
+      _isFavorite = favorites.contains(widget.movieId.toString());
+    });
+  }
+
+ Future<void> _toggleFavorite() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> favorites = prefs.getStringList('favorites') ?? [];
+
+    // Toggle favorite status
+    if (_isFavorite) {
+      favorites.remove(widget.movieId.toString());
+    } else {
+      favorites.add(widget.movieId.toString());
+    }
+
+    await prefs.setStringList('favorites', favorites);
+    
+    // Update local state
+    setState(() {
+      _isFavorite = !_isFavorite; // Update local favorite status
+    });
+  }
+
+
+//   Future<bool> _isFavorite(int movieId) async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//   List<String> favorites = prefs.getStringList('favorites') ?? [];
+//   return favorites.contains(movieId.toString());
+// }
+
+
   @override
   Widget build(BuildContext context) {
-     // Check if movie details are already cached
+    // Check if movie details are already cached
     if (_movieDetailsCache.containsKey(widget.movieId)) {
       return _buildMovieDetailsScreen(_movieDetailsCache[widget.movieId]!);
     }
     return Scaffold(
-      
         body: BlocProvider(
       create: (context) =>
           movieDetailsBloc..add(FetchMovieDetailsEvent(widget.movieId)),
@@ -72,9 +111,8 @@ class _MovieScreenState extends State<MovieScreen> {
               return const Center(child: Text('No details available.'));
             }
             //cache movie details new
-          _movieDetailsCache[widget.movieId] = movieDetails;
+            _movieDetailsCache[widget.movieId] = movieDetails;
 
-            
             return _buildMovieDetailsScreen(movieDetails);
 
           default:
@@ -87,165 +125,159 @@ class _MovieScreenState extends State<MovieScreen> {
   Widget _buildMovieDetailsScreen(MovieModel movieDetails) {
     var productCompany = movieDetails.productionCompanies;
     return SingleChildScrollView(
-              child: Column(
-                children: [
-                  Stack(
-                    children: [
-                      MoviesPosterWidget(
-                          backdropPath: movieDetails.backdropPath),
-                      MoviesLogoWidget(posterPath: movieDetails.posterPath),
-                      MoviesRatingWidget(
-                          voteAverage: movieDetails.voteAverage.toString()),
-                      Positioned(
-                          top: MediaQuery.of(context).size.height * .07,
-                          right: 30,
-                          child: GestureDetector(
-                            onTap: () {
-                              print('clicked');
-                            },
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(15),
-                              child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white.withOpacity(0.2)),
-                                  child: const Center(
-                                      child: Icon(
-                                    Icons.favorite_rounded,
-                                    color: Colors.white,
-                                  ))),
-                            ),
-                          ),),
-                      const BackButtonWidget(),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  //Movies Title
-                  MoviesTitleWidget(
-                    movieTitle: movieDetails.originalTitle,
-                    movieOverview: movieDetails.overview,
-                    onPressed: () => _launchURL(movieDetails.homepage),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  //Relese, revenue, popularity
-                  ReleaseRevenuePopularityWidget(
-                    movieRelesedate: movieDetails.releaseDate,
-                    movieRevenue: movieDetails.revenue.toString(),
-                    moviePopularity: movieDetails.popularity.toString(),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 20, right: 20, bottom: 8.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'A Short Summary of ${movieDetails.originalTitle}',
-                          style: GoogleFonts.poppins(
-                              fontSize: 17, fontWeight: FontWeight.w500),
+      child: Column(
+        children: [
+          Stack(
+            children: [
+              MoviesPosterWidget(backdropPath: movieDetails.backdropPath),
+              MoviesLogoWidget(posterPath: movieDetails.posterPath),
+              MoviesRatingWidget(
+                  voteAverage: movieDetails.voteAverage.toString()),
+            Positioned(
+                top: MediaQuery.of(context).size.height * .07,
+                right: 30,
+                child: GestureDetector(
+                  onTap: _toggleFavorite, // Use the local method
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      decoration: BoxDecoration(
+                        color: _isFavorite ? Colors.red : Colors.white.withOpacity(0.2), // Change color based on favorite status
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.favorite_rounded,
+                          color: Colors.white,
                         ),
-                        const Divider(),
-                        OriginCountryWidget(
-                            originCountry:
-                                movieDetails.originCountry.toString()),
-                        ProductionCountriesWidget(
-                          countries: movieDetails.productionCountries
-                              .map((country) => country.name)
-                              .toList(),
-                        ),
-                        BudgetWidget(budget: movieDetails.budget.toString()),
-                        OriginalLanguageWidget(
-                            originalLanguage: movieDetails.originalLanguage),
-                        SpokenLanguageWidget(
-                          languages: movieDetails.spokenLanguages
-                              .map((lang) => lang.name)
-                              .toList(),
-                        ),
-                        movieDetails.video == false
-                            ? VideoBoolWidget(
-                                icon: Icons.cancel_sharp,
-                                color: Colors.red[500],
-                              )
-                            : VideoBoolWidget(
-                                color: Colors.green[300],
-                                icon: Icons.check_box_rounded,
-                              ),
-                      ],
+                      ),
                     ),
                   ),
-                  //production companies
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        right: 20, left: 20, bottom: 18.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Production Companies: ",
-                          style: GoogleFonts.poppins(
-                              fontSize: 18, fontWeight: FontWeight.w500),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        SizedBox(
-                          height: 100,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: productCompany.length,
-                            itemBuilder: (context, index) {
-                              final company = productCompany[index];
-                              final logoUrl = company.logoPath.isNotEmpty
-                                  ? AppUrl.imageBaseUrl + company.logoPath
-                                  : null;
-
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Column(
-                                  children: [
-                                    CircleAvatar(
-                                      backgroundImage: logoUrl != null
-                                          ? NetworkImage(logoUrl)
-                                          : const AssetImage(
-                                              'assets/images/enterprise.png',
-                                            ),
-                                      radius: 20,
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      company.name,
-                                      style: GoogleFonts.poppins(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(
-                    height: 50,
-                  ),
-                ],
+                ),
               ),
-            );
+              const BackButtonWidget(),
+            ],
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          //Movies Title
+          MoviesTitleWidget(
+            movieTitle: movieDetails.originalTitle,
+            movieOverview: movieDetails.overview,
+            onPressed: () => _launchURL(movieDetails.homepage),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          //Relese, revenue, popularity
+          ReleaseRevenuePopularityWidget(
+            movieRelesedate: movieDetails.releaseDate,
+            movieRevenue: movieDetails.revenue.toString(),
+            moviePopularity: movieDetails.popularity.toString(),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
 
-       
+          Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'A Short Summary of ${movieDetails.originalTitle}',
+                  style: GoogleFonts.poppins(
+                      fontSize: 17, fontWeight: FontWeight.w500),
+                ),
+                const Divider(),
+                OriginCountryWidget(
+                    originCountry: movieDetails.originCountry.toString()),
+                ProductionCountriesWidget(
+                  countries: movieDetails.productionCountries
+                      .map((country) => country.name)
+                      .toList(),
+                ),
+                BudgetWidget(budget: movieDetails.budget.toString()),
+                OriginalLanguageWidget(
+                    originalLanguage: movieDetails.originalLanguage),
+                SpokenLanguageWidget(
+                  languages: movieDetails.spokenLanguages
+                      .map((lang) => lang.name)
+                      .toList(),
+                ),
+                movieDetails.video == false
+                    ? VideoBoolWidget(
+                        icon: Icons.cancel_sharp,
+                        color: Colors.red[500],
+                      )
+                    : VideoBoolWidget(
+                        color: Colors.green[300],
+                        icon: Icons.check_box_rounded,
+                      ),
+              ],
+            ),
+          ),
+          //production companies
+          Padding(
+            padding: const EdgeInsets.only(right: 20, left: 20, bottom: 18.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Production Companies: ",
+                  style: GoogleFonts.poppins(
+                      fontSize: 18, fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                SizedBox(
+                  height: 100,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: productCompany.length,
+                    itemBuilder: (context, index) {
+                      final company = productCompany[index];
+                      final logoUrl = company.logoPath.isNotEmpty
+                          ? AppUrl.imageBaseUrl + company.logoPath
+                          : null;
+
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Column(
+                          children: [
+                            CircleAvatar(
+                              backgroundImage: logoUrl != null
+                                  ? NetworkImage(logoUrl)
+                                  : const AssetImage(
+                                      'assets/images/enterprise.png',
+                                    ),
+                              radius: 20,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              company.name,
+                              style: GoogleFonts.poppins(
+                                  fontSize: 12, fontWeight: FontWeight.w300),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(
+            height: 50,
+          ),
+        ],
+      ),
+    );
   }
 }

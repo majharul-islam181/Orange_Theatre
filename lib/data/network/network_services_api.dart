@@ -9,13 +9,16 @@ import '../exceptions/app_exceptions.dart';
 
 class NetworkServicesApi implements BaseApiServices {
   @override
-  Future<dynamic> getApi(String url) async {
+  Future<dynamic> getApi(String url, {String? apiKey}) async {
     dynamic jsonResponse;
     try {
       final response =
-          await http.get(Uri.parse(url)).timeout(const Duration(seconds: 50));
+          await http.get(Uri.parse(url),
+          
+        // headers: apiKey != null ? {'Authorization': apiKey} : {},
+          
+          ).timeout(const Duration(seconds: 50));
       jsonResponse = returnResponse(response);
-
       if (response.statusCode == 200) {}
     } on SocketException {
       throw NoInternetException('');
