@@ -11,10 +11,10 @@ class TopUpcomingItem extends StatelessWidget {
     required this.data,
     this.width = 280,
     this.height = 300,
-   required this.onTap,
+    required this.onTap,
   });
 
- final MovieResult data;
+  final MovieResult data;
   final double width;
   final double height;
   final GestureTapCallback? onTap;
@@ -87,33 +87,33 @@ class TopUpcomingItem extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Releas Date: ${data.releaseDate}',
+            Text('Release Date: ${data.releaseDate}',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.poppins(
                   color: AppColor.labelColor,
                   fontSize: 13,
                 )),
-            Row(
-              children: [
-                Text(
-                  'Genre: ',
-                  style: GoogleFonts.poppins(
-                    fontSize: 12,
-                  ),
-                ),
-                Text(
-                  data.genreIds.join(', '),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: AppColor.primary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     Text(
+            //       'Genre: ',
+            //       style: GoogleFonts.poppins(
+            //         fontSize: 12,
+            //       ),
+            //     ),
+            //     Text(
+            //       data.genreIds.join(', '),
+            //       maxLines: 1,
+            //       overflow: TextOverflow.ellipsis,
+            //       style: const TextStyle(
+            //         color: AppColor.primary,
+            //         fontSize: 12,
+            //         fontWeight: FontWeight.w600,
+            //       ),
+            //     ),
+            //   ],
+            // ),
           ],
         ),
       ],
@@ -124,7 +124,7 @@ class TopUpcomingItem extends StatelessWidget {
     return CustomImage(
       '${AppUrl.imageBaseUrl}${data.posterPath}',
       width: double.infinity,
-      height: 235,
+      height: 150,
       radius: 15,
     );
   }

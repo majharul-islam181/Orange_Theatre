@@ -6,6 +6,7 @@ import 'package:orange_theatre/config/routes/routes.dart';
 import 'package:orange_theatre/models/favourite/favourite_model_hive.dart';
 import 'package:orange_theatre/repository/genre/genre_http_api_repository.dart';
 import 'package:orange_theatre/repository/genre/genre_repository.dart';
+import 'package:orange_theatre/views/Home%20Animation/AnimationHomePage.dart';
 import 'package:orange_theatre/views/RootApp/rootapp_screen.dart';
 import 'repository/movie_details/movie_repository.dart';
 import 'repository/repository.dart';
@@ -38,6 +39,8 @@ class MyApp extends StatelessWidget {
       ),
       onGenerateRoute: Routes.generateRoute,
       home: const RootApp(),
+      // home: const AnimationHomePage(),
+
       // home:  NearbyTheatersScreen(),
     );
   }

@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:orange_theatre/config/colors/color.dart';
 import 'package:orange_theatre/utils/constant.dart';
+import 'package:orange_theatre/views/Home%20Animation/AnimationHomePage.dart';
 
 import 'package:orange_theatre/views/explore/explore_root.dart';
 import 'package:orange_theatre/views/widgets/bottombar_item.dart';
@@ -20,7 +21,7 @@ class _RootAppState extends State<RootApp> with TickerProviderStateMixin {
   final List _barItems = [
     {
       "icon": "assets/icons/home.svg",
-      "page": const DashboardScreen(),
+      "page": const AnimationHomePage(),
     },
     {
       "icon": "assets/icons/search copy.svg",
@@ -32,7 +33,7 @@ class _RootAppState extends State<RootApp> with TickerProviderStateMixin {
     },
     {
       "icon": "assets/icons/favorite-border.svg",
-      "page":  FavouriteScreen(),
+      "page":  const FavouriteScreen(),
     },
   ];
 
