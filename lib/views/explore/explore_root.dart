@@ -13,6 +13,7 @@ import 'package:orange_theatre/utils/enums.dart';
 import 'package:orange_theatre/views/Movie-Screen/movie_screen.dart';
 import '../../config/colors/color.dart';
 import '../../main.dart';
+import '../../models/trending_movies/trending_movies_model.dart';
 import '../widgets.dart';
 
 class ExploreRoot extends StatefulWidget {
@@ -28,6 +29,8 @@ class _ExploreRootState extends State<ExploreRoot> {
   int _currentPage = 1;
   bool _isFetchingMore = false;
   String searchQuery = "";
+  String searchQueryForFilter = "";
+  String? _selectedValue;
 
   @override
   void initState() {
@@ -77,7 +80,15 @@ class _ExploreRootState extends State<ExploreRoot> {
         ],
         child: Column(
           children: [
-            getSearchBox(),
+            BlocBuilder<TrendingMoviesBloc, TrendingMoviesState>(
+              builder: (context, state) {
+                if (state.trendingMoviesList.status == Status.completed) {
+                  final movieList = state.trendingMoviesList.data!;
+                  return getSearchBox(movieList);
+                }
+                return getSearchBox(TrendingMoviesModel(results: []));
+              },
+            ),
             const SizedBox(height: 4),
             Expanded(
               child: LiquidPullToRefresh(
@@ -103,9 +114,7 @@ class _ExploreRootState extends State<ExploreRoot> {
                             "No Internet Connection") {
                           return InterNetExceptionWidget(
                             onPress: () => trendingMoviesBloc.add(
-                              FetchTrendingMoviesEvent(
-                                  page:
-                                      _currentPage), 
+                              FetchTrendingMoviesEvent(page: _currentPage),
                             ),
                           );
                         }
@@ -208,7 +217,7 @@ class _ExploreRootState extends State<ExploreRoot> {
     );
   }
 
-  Widget getSearchBox() {
+  Widget getSearchBox(TrendingMoviesModel movieList) {
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 15),
       child: Row(
@@ -242,7 +251,7 @@ class _ExploreRootState extends State<ExploreRoot> {
                       color: Colors.grey,
                     ),
                     border: InputBorder.none,
-                    hintText: "Search by name or location",
+                    hintText: "Search by movie title",
                     hintStyle: TextStyle(color: Colors.grey, fontSize: 15),
                   ),
                 ),
@@ -252,7 +261,7 @@ class _ExploreRootState extends State<ExploreRoot> {
           const SizedBox(width: 10),
           GestureDetector(
             onTap: () {
-              _showFilterBottomSheet();
+              _showFilterBottomSheet(movieList);
             },
             child: Container(
               padding: const EdgeInsets.all(5),
@@ -273,14 +282,16 @@ class _ExploreRootState extends State<ExploreRoot> {
     );
   }
 
-  void _showFilterBottomSheet() {
+  void _showFilterBottomSheet(TrendingMoviesModel movieList) {
+    List<bool> selectedGenres = List.generate(genresList.length, (_) => false);
+    var demo;
     showModalBottomSheet(
       context: context,
       builder: (context) {
         return Padding(
           padding: const EdgeInsets.all(16.0),
           child: SizedBox(
-            height: MediaQuery.of(context).size.height * .8,
+            height: MediaQuery.of(context).size.height * .9,
             width: MediaQuery.of(context).size.width * 98,
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -290,8 +301,56 @@ class _ExploreRootState extends State<ExploreRoot> {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: genresList.length,
+                    itemBuilder: (context, index) {
+                      return CheckboxListTile(
+                        title: Text(genresList[index].name),
+                        value: selectedGenres[index],
+                        onChanged: (bool? value) {
+                          setState(() {
+                            selectedGenres[index] = value!;
+                            demo = selectedGenres[index];
+                          });
+                        },
+                      );
+                    },
+                  ),
+                ),
                 ElevatedButton(
                   onPressed: () {
+                    print(demo);
+
+                    // final filteredMovies = movieList.results.where((movie) {
+                    //   // Check if the movie title matches the search query
+                    //   bool titleMatches = movie.title
+                    //       .toLowerCase()
+                    //       .contains(searchQuery.toLowerCase());
+
+                    //   // Check if any selected genres match the movie's genres
+                    //   bool genreMatches = movie.genreIds.any((genreId) {
+                    //     int index =
+                    //         genresList.indexWhere((g) => g.id == genreId);
+                    //     // Check if the index is valid before accessing selectedGenres
+                    //     if (index != -1 && index < selectedGenres.length) {
+                    //       return selectedGenres[
+                    //           index]; // Check if the genre is selected
+                    //     }
+                    //     return false; // Return false if the genre was not found or index is invalid
+                    //   });
+
+                    //   // Combine the results to see if both conditions are met
+                    //   return titleMatches &&
+                    //       (selectedGenres.contains(true) ? genreMatches : true);
+                    // }).toList();
+
+                    // // Debugging output (optional)
+                    // print(
+                    //     "Filtered Movies: ${filteredMovies.length}"); // Check the number of filtered movies
+                    print('button clickecd');
+
+                    // Close the bottom sheet or dialog
                     Navigator.pop(context);
                   },
                   child: const Text("Apply Filters"),
@@ -303,4 +362,5 @@ class _ExploreRootState extends State<ExploreRoot> {
       },
     );
   }
+
 }
