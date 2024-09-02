@@ -32,7 +32,7 @@ class _RootAppState extends State<RootApp> with TickerProviderStateMixin {
     },
     {
       "icon": "assets/icons/favorite-border.svg",
-      "page":  FavoriteScreen(),
+      "page":  FavouriteScreen(),
     },
   ];
 

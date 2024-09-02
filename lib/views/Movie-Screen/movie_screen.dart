@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:orange_theatre/bloc/movie_details_bloc/movie_details_bloc.dart';
 import 'package:orange_theatre/config/app_url.dart';
 import 'package:orange_theatre/main.dart';
+import 'package:orange_theatre/models/favourite/favourite_model_hive.dart';
 import 'package:orange_theatre/utils/enums.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../models/models.dart';
@@ -22,23 +23,15 @@ class _MovieScreenState extends State<MovieScreen> {
   late MovieDetailsBloc movieDetailsBloc;
   final Map<int, MovieModel> _movieDetailsCache = {};
   bool _isFavorite = false;
-  bool _isBoxOpen = false; // Flag to track if the box is open
 
   @override
   void initState() {
     super.initState();
     movieDetailsBloc = MovieDetailsBloc(movieDetailsRepository: getIt());
     _loadFavoriteStatus();
-    _openBox();
   }
 
-Future<void> _openBox() async {
-    if (!_isBoxOpen) { // Check if the box is already open
-      await Hive.openBox('favouritesBox');
-      _isBoxOpen = true; // Set the flag to true after opening
-      await _loadFavoriteStatus(); // Load favorite status after opening the box
-    }
-  }
+
 
   Future<void> _launchURL(String url) async {
     if (await canLaunch(url)) {
@@ -49,27 +42,34 @@ Future<void> _openBox() async {
   }
 
   Future<void> _loadFavoriteStatus() async {
-    var box = Hive.box('favouritesBox');
+   var box = Hive.box<FavouriteModelHive>('favouritesBox');
     setState(() {
       _isFavorite = box.containsKey(widget.movieId);
     });
   }
 
-  Future<void> _toggleFavorite() async {
-    var box = Hive.box('favoruitesBox');
+Future<void> _toggleFavorite(MovieModel movieDetails) async {
+  var box = Hive.box<FavouriteModelHive>('favouritesBox');
 
-    // Toggle favorite status
-    if (_isFavorite) {
-      box.delete(widget.movieId);
-    } else {
-      box.put(widget.movieId, widget.movieId);
-    }
-
-    // Update local state
-    setState(() {
-      _isFavorite = !_isFavorite;
-    });
+  // Toggle favorite status
+  if (_isFavorite) {
+    box.delete(widget.movieId);
+  } else {
+    var movie = FavouriteModelHive(
+      id: widget.movieId,
+      originalTitle: movieDetails.originalTitle, 
+      releaseDate: movieDetails.releaseDate, 
+      backdropPath: movieDetails.backdropPath, 
+    );
+    box.put(widget.movieId, movie);
   }
+
+  // Update local state
+  setState(() {
+    _isFavorite = !_isFavorite;
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +133,7 @@ Future<void> _openBox() async {
                 top: MediaQuery.of(context).size.height * .07,
                 right: 30,
                 child: GestureDetector(
-                  onTap: _toggleFavorite, // Use the local method
+                  onTap:() =>  _toggleFavorite(movieDetails), 
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child: Container(

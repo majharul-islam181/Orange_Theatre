@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:orange_theatre/config/routes/routes.dart';
@@ -9,18 +9,16 @@ import 'package:orange_theatre/repository/genre/genre_repository.dart';
 import 'package:orange_theatre/views/RootApp/rootapp_screen.dart';
 import 'repository/movie_details/movie_repository.dart';
 import 'repository/repository.dart';
-import 'package:path_provider/path_provider.dart' as pathProvider;
+import 'package:path_provider/path_provider.dart';
 
 //Depency Injection
 GetIt getIt = GetIt.instance;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //for showing favourite movies using Hive database.
-  await Hive.initFlutter();
-  final directory = await pathProvider.getApplicationDocumentsDirectory();
-  // Hive.init(directory.path);
+  var directory = await getApplicationDocumentsDirectory();
+  Hive.init(directory.path);
   Hive.registerAdapter(FavouriteModelHiveAdapter());
-  // await Hive.openBox('favouritesBox');
+  await Hive.openBox<FavouriteModelHive>('favouritesBox');
   // await dotenv.load(fileName: ".env");
   servicesLocator();
   runApp(const MyApp());
