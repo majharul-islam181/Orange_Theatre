@@ -33,19 +33,23 @@ class _ExploreRootState extends State<ExploreRoot> {
   void initState() {
     super.initState();
     trendingMoviesBloc = TrendingMoviesBloc(trendingMoviesRepository: getIt());
-    trendingMoviesBloc.add(FetchTrendingMoviesEvent(page: _currentPage)); // Fetch initial data for page 1
+    trendingMoviesBloc.add(FetchTrendingMoviesEvent(
+        page: _currentPage)); // Fetch initial data for page 1
     _scrollController = ScrollController();
-    _scrollController.addListener(_handleScroll); // Attach listener for scrolling
+    _scrollController
+        .addListener(_handleScroll); // Attach listener for scrolling
   }
 
   void _handleScroll() {
-    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
       if (!_isFetchingMore) {
         setState(() {
           _isFetchingMore = true;
         });
         _currentPage++;
-        trendingMoviesBloc.add(FetchTrendingMoviesEvent(page: _currentPage)); // Fetch data for next page
+        trendingMoviesBloc.add(FetchTrendingMoviesEvent(
+            page: _currentPage)); // Fetch data for next page
       }
     }
   }
@@ -68,7 +72,7 @@ class _ExploreRootState extends State<ExploreRoot> {
           BlocProvider(create: (context) => trendingMoviesBloc),
           BlocProvider(
             create: (context) => GenreBloc(genreRepository: getIt())
-              ..add(const FetchGenreEvent()), 
+              ..add(const FetchGenreEvent()),
           ),
         ],
         child: Column(
@@ -80,7 +84,8 @@ class _ExploreRootState extends State<ExploreRoot> {
                 showChildOpacityTransition: false,
                 onRefresh: () async {
                   _currentPage = 1; // Reset page for refresh
-                  trendingMoviesBloc.add(const FetchTrendingMoviesEvent(page: 1)); // Fetch data for page 1 again
+                  trendingMoviesBloc.add(const FetchTrendingMoviesEvent(
+                      page: 1)); // Fetch data for page 1 again
                 },
                 child: BlocBuilder<TrendingMoviesBloc, TrendingMoviesState>(
                   builder: (context, state) {
@@ -89,14 +94,18 @@ class _ExploreRootState extends State<ExploreRoot> {
                         if (_currentPage == 1) {
                           return const Center(child: LoadingWidget());
                         } else {
-                          return const Center(child: CircularProgressIndicator());
+                          return const Center(
+                              child: CircularProgressIndicator());
                         }
 
                       case Status.error:
-                        if (state.trendingMoviesList.message == "No Internet Connection") {
+                        if (state.trendingMoviesList.message ==
+                            "No Internet Connection") {
                           return InterNetExceptionWidget(
                             onPress: () => trendingMoviesBloc.add(
-                              FetchTrendingMoviesEvent(page: _currentPage), // Retry fetch for current page
+                              FetchTrendingMoviesEvent(
+                                  page:
+                                      _currentPage), 
                             ),
                           );
                         }
@@ -108,10 +117,13 @@ class _ExploreRootState extends State<ExploreRoot> {
 
                       case Status.completed:
                         final movieList = state.trendingMoviesList.data!;
-                        final filteredMovies = movieList.results.where((movie) =>
-                            movie.title.toLowerCase().contains(searchQuery.toLowerCase())).toList();
+                        final filteredMovies = movieList.results
+                            .where((movie) => movie.title
+                                .toLowerCase()
+                                .contains(searchQuery.toLowerCase()))
+                            .toList();
 
-                        _isFetchingMore = false; // Reset the fetching flag
+                        _isFetchingMore = false;
 
                         if (filteredMovies.isEmpty && _currentPage == 1) {
                           return const Center(child: Text("No movies found."));
@@ -119,10 +131,12 @@ class _ExploreRootState extends State<ExploreRoot> {
 
                         return ListView.builder(
                           controller: _scrollController,
-                          itemCount: filteredMovies.length + (_isFetchingMore ? 1 : 0),
+                          itemCount:
+                              filteredMovies.length + (_isFetchingMore ? 1 : 0),
                           itemBuilder: (context, index) {
                             if (index == filteredMovies.length) {
-                              return const Center(child: CircularProgressIndicator());
+                              return const Center(
+                                  child: CircularProgressIndicator());
                             }
 
                             final movie = filteredMovies[index];
@@ -139,7 +153,8 @@ class _ExploreRootState extends State<ExploreRoot> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => MovieScreen(movieId: movie.id),
+                                    builder: (context) =>
+                                        MovieScreen(movieId: movie.id),
                                   ),
                                 );
                               },
@@ -150,7 +165,8 @@ class _ExploreRootState extends State<ExploreRoot> {
                                 genreName: movie.genreIds.map((id) {
                                   final genre = genresList.firstWhere(
                                     (g) => g.id == id,
-                                    orElse: () => GenresModel(id: id, name: 'Unknown'),
+                                    orElse: () =>
+                                        GenresModel(id: id, name: 'Unknown'),
                                   );
                                   return genre.name;
                                 }).join(', '),
@@ -263,21 +279,25 @@ class _ExploreRootState extends State<ExploreRoot> {
       builder: (context) {
         return Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                "Filter Options",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context); // Close the bottom sheet
-                },
-                child: const Text("Apply Filters"),
-              ),
-            ],
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * .8,
+            width: MediaQuery.of(context).size.width * 98,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  "Filter Options",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text("Apply Filters"),
+                ),
+              ],
+            ),
           ),
         );
       },

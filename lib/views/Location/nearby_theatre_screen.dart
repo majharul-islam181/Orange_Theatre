@@ -46,7 +46,6 @@ class _NearbyTheatersScreenState extends State<NearbyTheatersScreen> {
       }
     }
 
-    // Get the user's current location
     _currentLocation = await location.getLocation();
     if (_currentLocation != null) {
       _fetchNearbyTheaters();
@@ -57,7 +56,8 @@ class _NearbyTheatersScreenState extends State<NearbyTheatersScreen> {
     final lat = _currentLocation?.latitude;
     final lon = _currentLocation?.longitude;
     const apiKey = "fsq3me+a6HnvxHLlL9gshuhXKkbueM3waVdw0zLz2JQbi5c=";
-    var url = 'https://api.foursquare.com/v3/places/search?query=movie%20theater&ll=$lat,$lon&radius=5000&limit=10';
+    var url =
+        'https://api.foursquare.com/v3/places/search?query=movie%20theater&ll=$lat,$lon&radius=5000&limit=10';
 
     final response = await http.get(
       Uri.parse(url),
@@ -92,7 +92,12 @@ class _NearbyTheatersScreenState extends State<NearbyTheatersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Nearby Movie Theaters'),
+        title: const Text(
+          'Nearby Movie Theaters',
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.blueAccent,
       ),
       body: _currentLocation == null
           ? const Center(child: CircularProgressIndicator())
