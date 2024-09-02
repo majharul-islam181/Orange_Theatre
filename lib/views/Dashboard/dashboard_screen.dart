@@ -146,7 +146,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return BlocProvider(
       create: (context) => trendingMoviesBloc
         ..add(
-          const FetchTrendingMoviesEvent(),
+          const FetchTrendingMoviesEvent(page: 1),
         ),
       child: BlocBuilder<TrendingMoviesBloc, TrendingMoviesState>(
         builder: (context, state) {
@@ -159,7 +159,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   "No Internet Connection") {
                 return InterNetExceptionWidget(
                   onPress: () =>
-                      trendingMoviesBloc.add(const FetchTrendingMoviesEvent()),
+                      trendingMoviesBloc.add(const FetchTrendingMoviesEvent(page: 1)),
                 );
               }
               return Center(

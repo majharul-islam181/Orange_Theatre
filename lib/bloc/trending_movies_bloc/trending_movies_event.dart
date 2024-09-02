@@ -10,11 +10,8 @@ abstract class TrendingMoviesEvent extends Equatable {
 
 class FetchTrendingMoviesEvent extends TrendingMoviesEvent {
   final int page;
-  const FetchTrendingMoviesEvent({this.page=1});
-
+  const FetchTrendingMoviesEvent({required this.page});
 
   @override
   List<Object?> get props => [page];
-
-
 }

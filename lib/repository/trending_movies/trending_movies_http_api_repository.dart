@@ -7,8 +7,8 @@ class TrendingMoviesHttpApiRepository extends TrendingMoviesRepository {
   final _apiServices = NetworkServicesApi();
 
   @override
-  Future<TrendingMoviesModel> fetchTrendingMoviesList() async {
-    final String endpoint = AppUrl.popularMoviesList;
+  Future<TrendingMoviesModel> fetchTrendingMoviesList(int page) async {
+    final String endpoint = AppUrl.popularMoviesList(page);
     final response = await _apiServices.getApi(endpoint);
 
     return TrendingMoviesModel.fromJson(response);

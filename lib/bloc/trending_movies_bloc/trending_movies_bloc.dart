@@ -1,5 +1,5 @@
+// ignore_for_file: prefer_final_fields
 import 'dart:convert';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
@@ -13,6 +13,8 @@ part 'trending_movies_state.dart';
 class TrendingMoviesBloc
     extends Bloc<TrendingMoviesEvent, TrendingMoviesState> {
   TrendingMoviesRepository trendingMoviesRepository;
+  // int _currentPage = 1;
+  // List<MovieModel> _movies = [];
 
   TrendingMoviesBloc({required this.trendingMoviesRepository})
       : super(TrendingMoviesState(trendingMoviesList: ApiResponse.loading())) {
@@ -27,6 +29,7 @@ class TrendingMoviesBloc
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String? cashedData = sharedPreferences.getString('trendingMoviesData');
 
+    // Cash the all data
     if (cashedData != null) {
       TrendingMoviesModel cashedMovies =
           TrendingMoviesModel.fromJson(json.decode(cashedData));
@@ -37,7 +40,7 @@ class TrendingMoviesBloc
     try {
       // Fetch data from the API
       final trendingList =
-          await trendingMoviesRepository.fetchTrendingMoviesList();
+          await trendingMoviesRepository.fetchTrendingMoviesList(event.page);
       emit(state.copyWith(
           trendingMoviesList: ApiResponse.completed(trendingList)));
       // Cache the fetched data for future use
