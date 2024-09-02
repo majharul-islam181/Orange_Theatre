@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:orange_theatre/config/routes/routes.dart';
 import 'package:orange_theatre/models/favourite/favourite_model_hive.dart';
 import 'package:orange_theatre/repository/genre/genre_http_api_repository.dart';
 import 'package:orange_theatre/repository/genre/genre_repository.dart';
+import 'package:orange_theatre/views/OnBoardingScreen/onboarding_page.dart';
 import 'package:orange_theatre/views/RootApp/rootapp_screen.dart';
 import 'repository/movie_details/movie_repository.dart';
 import 'repository/repository.dart';
@@ -32,12 +34,33 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Orange Theatre',
+      // theme: ThemeData(
+      //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      //   useMaterial3: true,
+      // ),
+
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        textTheme: GoogleFonts.poppinsTextTheme().apply(
+          bodyColor: Colors.white,
+          displayColor: Colors.white,
+        ),
+        brightness: Brightness.light,
+        scaffoldBackgroundColor: const Color(0xff181828),
+        hintColor: const Color(0xff676699).withOpacity(0.9),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xfff11b43),
+        ).copyWith(
+          brightness: Brightness.light,
+          primary: const Color(0xfff11b43),
+          secondary: const Color(0xff181828),
+        ),
         useMaterial3: true,
       ),
       onGenerateRoute: Routes.generateRoute,
-      home: const RootApp(),
+      home: const OnBoardingPage(),
       // home: const AnimationHomePage(),
     );
   }

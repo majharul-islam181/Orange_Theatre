@@ -18,7 +18,7 @@ class BackButtonWidget extends StatelessWidget {
               height: 30,
               child: Icon(
                 Icons.arrow_back,
-                color: Colors.white,
+                color: Colors.black,
               ),
             ),
             onTap: () {

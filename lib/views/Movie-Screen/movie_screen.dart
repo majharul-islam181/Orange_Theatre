@@ -71,9 +71,9 @@ class _MovieScreenState extends State<MovieScreen> {
   @override
   Widget build(BuildContext context) {
     // Check if movie details are already cached
-    // if (_movieDetailsCache.containsKey(widget.movieId)) {
-    //   return _buildMovieDetailsScreen(_movieDetailsCache[widget.movieId]!);
-    // }
+    if (_movieDetailsCache.containsKey(widget.movieId)) {
+      return _buildMovieDetailsScreen(_movieDetailsCache[widget.movieId]!);
+    }
     return Scaffold(
       body: BlocProvider(
         create: (context) =>

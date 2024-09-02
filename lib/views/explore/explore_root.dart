@@ -70,6 +70,7 @@ class _ExploreRootState extends State<ExploreRoot> {
       appBar: AppBar(
         title: getAppBar(),
       ),
+      backgroundColor: Colors.black.withOpacity(.02),
       body: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => trendingMoviesBloc),
@@ -80,6 +81,9 @@ class _ExploreRootState extends State<ExploreRoot> {
         ],
         child: Column(
           children: [
+            const SizedBox(
+              height: 05,
+            ),
             BlocBuilder<TrendingMoviesBloc, TrendingMoviesState>(
               builder: (context, state) {
                 if (state.trendingMoviesList.status == Status.completed) {
@@ -284,7 +288,7 @@ class _ExploreRootState extends State<ExploreRoot> {
 
   void _showFilterBottomSheet(TrendingMoviesModel movieList) {
     List<bool> selectedGenres = List.generate(genresList.length, (_) => false);
-    var demo;
+    bool demo;
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -320,8 +324,6 @@ class _ExploreRootState extends State<ExploreRoot> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    print(demo);
-
                     // final filteredMovies = movieList.results.where((movie) {
                     //   // Check if the movie title matches the search query
                     //   bool titleMatches = movie.title
@@ -362,5 +364,4 @@ class _ExploreRootState extends State<ExploreRoot> {
       },
     );
   }
-
 }
