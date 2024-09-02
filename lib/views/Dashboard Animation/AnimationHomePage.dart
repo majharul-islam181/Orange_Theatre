@@ -1,8 +1,8 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:orange_theatre/views/Home%20Animation/tabs/tabs_for_trending_movies.dart';
-import 'package:orange_theatre/views/Home%20Animation/top_upcoming_movies.dart';
+import 'package:orange_theatre/views/Dashboard%20Animation/tabs/tabs_for_trending_movies.dart';
+import 'package:orange_theatre/views/Dashboard%20Animation/top_upcoming_movies.dart';
 import 'top_trending_movies.dart';
 import 'tabs/tabs_for_upcoming_movies.dart';
 

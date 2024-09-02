@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:orange_theatre/config/colors/color.dart';
 import 'package:orange_theatre/utils/constant.dart';
-import 'package:orange_theatre/views/Home%20Animation/AnimationHomePage.dart';
+import 'package:orange_theatre/views/Dashboard%20Animation/AnimationHomePage.dart';
 
 import 'package:orange_theatre/views/explore/explore_root.dart';
 import 'package:orange_theatre/views/widgets/bottombar_item.dart';
