@@ -28,8 +28,9 @@ class _ExploreRootState extends State<ExploreRoot> {
   int _currentPage = 1;
   bool _isFetchingMore = false;
   String searchQuery = "";
-  String searchQueryForFilter = "";
+  // String searchQueryForFilter = "";
   String? _selectedValue;
+  List<int> movieId = [];
 
   @override
   void initState() {
@@ -130,10 +131,15 @@ class _ExploreRootState extends State<ExploreRoot> {
 
                       case Status.completed:
                         final movieList = state.trendingMoviesList.data!;
+
                         final filteredMovies = movieList.results
-                            .where((movie) => movie.title
-                                .toLowerCase()
-                                .contains(searchQuery.toLowerCase()))
+                            .where((movie) =>
+                                (movieId.isEmpty ||
+                                    movieId.contains(movie.id)) ||
+                                (searchQuery.isEmpty ||
+                                    movie.title
+                                        .toLowerCase()
+                                        .contains(searchQuery.toLowerCase())))
                             .toList();
 
                         _isFetchingMore = false;
@@ -289,7 +295,7 @@ class _ExploreRootState extends State<ExploreRoot> {
 
   void _showFilterBottomSheet(TrendingMoviesModel movieList) {
     List<bool> selectedGenres = List.generate(genresList.length, (_) => false);
-    bool demo;
+
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -297,7 +303,7 @@ class _ExploreRootState extends State<ExploreRoot> {
           padding: const EdgeInsets.all(16.0),
           child: SizedBox(
             height: MediaQuery.of(context).size.height * .9,
-            width: MediaQuery.of(context).size.width * 98,
+            width: MediaQuery.of(context).size.width * .98,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -305,7 +311,9 @@ class _ExploreRootState extends State<ExploreRoot> {
                   "Filter Options",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
+                const Divider(),
+                const SizedBox(height: 10),
                 Expanded(
                   child: ListView.builder(
                     itemCount: genresList.length,
@@ -315,45 +323,41 @@ class _ExploreRootState extends State<ExploreRoot> {
                         value: selectedGenres[index],
                         onChanged: (bool? value) {
                           setState(() {
-                            selectedGenres[index] = value!;
-                            demo = selectedGenres[index];
+                            selectedGenres[index] = value ?? false;
                           });
                         },
+                        checkColor:
+                            Colors.white, 
+                        activeColor:
+                            Colors.blue, 
                       );
                     },
                   ),
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    // final filteredMovies = movieList.results.where((movie) {
-                    //   // Check if the movie title matches the search query
-                    //   bool titleMatches = movie.title
-                    //       .toLowerCase()
-                    //       .contains(searchQuery.toLowerCase());
+                    // Get the list of selected genre IDs
+                    List<int> selectedGenreIds = genresList
+                        .asMap()
+                        .entries
+                        .where((entry) => selectedGenres[entry.key])
+                        .map((entry) => entry.value.id)
+                        .toList();
 
-                    //   // Check if any selected genres match the movie's genres
-                    //   bool genreMatches = movie.genreIds.any((genreId) {
-                    //     int index =
-                    //         genresList.indexWhere((g) => g.id == genreId);
-                    //     // Check if the index is valid before accessing selectedGenres
-                    //     if (index != -1 && index < selectedGenres.length) {
-                    //       return selectedGenres[
-                    //           index]; // Check if the genre is selected
-                    //     }
-                    //     return false; // Return false if the genre was not found or index is invalid
-                    //   });
+                    List<Movie> filteredMovies = movieList.results
+                        .where((movie) =>
+                            selectedGenreIds.isEmpty ||
+                            movie.genreIds
+                                .any((id) => selectedGenreIds.contains(id)))
+                        .toList();
 
-                    //   // Combine the results to see if both conditions are met
-                    //   return titleMatches &&
-                    //       (selectedGenres.contains(true) ? genreMatches : true);
-                    // }).toList();
-
-                    // // Debugging output (optional)
-                    // print(
-                    //     "Filtered Movies: ${filteredMovies.length}"); // Check the number of filtered movies
-                    print('button clickecd');
-
-                    // Close the bottom sheet or dialog
+                    setState(() {
+                      movieId =
+                          filteredMovies.map((movie) => movie.id).toList();
+                      searchQuery = selectedGenreIds.isEmpty
+                          ? ""
+                          : 'Filtered by ${selectedGenreIds.length} genres';
+                    });
                     Navigator.pop(context);
                   },
                   child: const Text("Apply Filters"),
