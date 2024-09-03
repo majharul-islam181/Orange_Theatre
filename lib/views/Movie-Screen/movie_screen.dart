@@ -75,6 +75,7 @@ class _MovieScreenState extends State<MovieScreen> {
       return _buildMovieDetailsScreen(_movieDetailsCache[widget.movieId]!);
     }
     return Scaffold(
+      backgroundColor: Colors.white,
       body: BlocProvider(
         create: (context) =>
             movieDetailsBloc..add(FetchMovieDetailsEvent(widget.movieId)),

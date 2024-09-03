@@ -70,7 +70,7 @@ class _ExploreRootState extends State<ExploreRoot> {
       appBar: AppBar(
         title: getAppBar(),
       ),
-      backgroundColor: Colors.black.withOpacity(.02),
+      // backgroundColor: Colors.black.withOpacity(.02),
       body: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => trendingMoviesBloc),

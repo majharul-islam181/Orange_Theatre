@@ -1,6 +1,9 @@
 // ignore_for_file: file_names
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:orange_theatre/bloc/theme/theme_switcher_bloc.dart';
+import 'package:orange_theatre/bloc/theme/theme_switcher_event.dart';
 import 'package:orange_theatre/views/Dashboard%20Animation/tabs/tabs_for_trending_movies.dart';
 import 'package:orange_theatre/views/Dashboard%20Animation/top_upcoming_movies.dart';
 import 'top_trending_movies.dart';
@@ -24,10 +27,22 @@ class AnimationHomePage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        // backgroundColor: Colors.transparent,
         elevation: 0,
+        actions: [
+          BlocBuilder<ThemeSwitcherBloc, ThemeData>(builder: (context, state) {
+            return Transform.scale(
+              scale: 0.7,
+              child: CupertinoSwitch(
+                  value: state == ThemeData.dark(),
+                  onChanged: (bool value) {
+                    // print(value);
+                    context.read<ThemeSwitcherBloc>().add(ThemeSwitching());
+                  }),
+            );
+          })
+        ],
       ),
-      backgroundColor: Colors.white,
       body: const Stack(
         children: <Widget>[
           SafeArea(
@@ -43,6 +58,7 @@ class AnimationHomePage extends StatelessWidget {
                   TabsForUpcomingMovies(),
                   TopUpcomingMovies(),
                   SizedBox(height: 10),
+                  // SettingsPage()
                 ],
               ),
             ),

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:orange_theatre/bloc/theme/theme_switcher_bloc.dart';
+import 'package:orange_theatre/bloc/theme/theme_switcher_event.dart';
 import 'package:orange_theatre/config/routes/routes.dart';
 import 'package:orange_theatre/models/favourite/favourite_model_hive.dart';
 import 'package:orange_theatre/repository/genre/genre_http_api_repository.dart';
 import 'package:orange_theatre/repository/genre/genre_repository.dart';
-import 'package:orange_theatre/views/OnBoardingScreen/onboarding_page.dart';
 import 'package:orange_theatre/views/RootApp/rootapp_screen.dart';
 import 'repository/movie_details/movie_repository.dart';
 import 'repository/repository.dart';
@@ -23,7 +24,10 @@ void main() async {
   await Hive.openBox<FavouriteModelHive>('favouritesBox');
   // await dotenv.load(fileName: ".env");
   servicesLocator();
-  runApp(const MyApp());
+  runApp(BlocProvider(
+    create: (context) => ThemeSwitcherBloc()..add(SetInitialTheme()),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -31,37 +35,24 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Orange Theatre',
-      // theme: ThemeData(
-      //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      //   useMaterial3: true,
-      // ),
+    return BlocBuilder<ThemeSwitcherBloc, ThemeData>(
+      builder: (context, state) {
+        // final themeData = state is DarkThemeState
+        //     ? ThemeData.dark()
+        //     : ThemeData.light();
 
-      theme: ThemeData(
-        textTheme: GoogleFonts.poppinsTextTheme().apply(
-          bodyColor: Colors.white,
-          displayColor: Colors.white,
-        ),
-        brightness: Brightness.light,
-        scaffoldBackgroundColor: const Color(0xff181828),
-        hintColor: const Color(0xff676699).withOpacity(0.9),
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xfff11b43),
-        ).copyWith(
-          brightness: Brightness.light,
-          primary: const Color(0xfff11b43),
-          secondary: const Color(0xff181828),
-        ),
-        useMaterial3: true,
-      ),
-      onGenerateRoute: Routes.generateRoute,
-      home: const OnBoardingPage(),
-      // home: const AnimationHomePage(),
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Orange Theatre',
+          theme: state,
+          // theme: themeData.copyWith(
+          //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          //   useMaterial3: true,
+          // ),
+          onGenerateRoute: Routes.generateRoute,
+          home: const RootApp(),
+        );
+      },
     );
   }
 }
