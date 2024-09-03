@@ -1,16 +1,16 @@
-// ignore_for_file: use_super_parameters, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
 import 'package:orange_theatre/config/colors/color.dart';
 import 'package:orange_theatre/utils/constant.dart';
 import 'package:orange_theatre/views/Dashboard%20Animation/AnimationHomePage.dart';
-
 import 'package:orange_theatre/views/explore/explore_root.dart';
 import 'package:orange_theatre/views/widgets/bottombar_item.dart';
+import 'package:lottie/lottie.dart'; // Import the Lottie package
+
 import '../views.dart';
 
 class RootApp extends StatefulWidget {
-  const RootApp({Key? key}) : super(key: key);
+  const RootApp({super.key});
 
   @override
   _RootAppState createState() => _RootAppState();
@@ -18,6 +18,8 @@ class RootApp extends StatefulWidget {
 
 class _RootAppState extends State<RootApp> with TickerProviderStateMixin {
   int _activeTabIndex = 0;
+  DateTime? _lastPressed;
+
   final List _barItems = [
     {
       "icon": "assets/icons/home.svg",
@@ -25,19 +27,19 @@ class _RootAppState extends State<RootApp> with TickerProviderStateMixin {
     },
     {
       "icon": "assets/icons/search copy.svg",
-      "page":  const ExploreRoot(),
+      "page": const ExploreRoot(),
     },
     {
       "icon": "assets/icons/location.svg",
-      "page":  NearbyTheatersScreen(),
+      "page": NearbyTheatersScreen(),
     },
     {
       "icon": "assets/icons/favorite-border.svg",
-      "page":  const FavouriteScreen(),
+      "page": const FavouriteScreen(),
     },
   ];
 
-//====== set animation=====
+  //====== set animation=====
   late final AnimationController _controller = AnimationController(
     duration: const Duration(milliseconds: ANIMATED_BODY_MS),
     vsync: this,
@@ -73,15 +75,66 @@ class _RootAppState extends State<RootApp> with TickerProviderStateMixin {
     _controller.forward();
   }
 
-//====== end set animation=====
+  //====== end set animation=====
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.appBgColor,
-      bottomNavigationBar: _buildBottomBar(),
-      body: _buildPage(),
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        backgroundColor: AppColor.appBgColor,
+        bottomNavigationBar: _buildBottomBar(),
+        body: _buildPage(),
+      ),
     );
+  }
+
+  Future<bool> _onWillPop() async {
+    final now = DateTime.now();
+    if (_lastPressed == null ||
+        now.difference(_lastPressed!) > const Duration(seconds: 2)) {
+      _lastPressed = now;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Press again to exit'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return Future.value(false);
+    }
+
+    final shouldExit = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Column(
+          children: [
+            Lottie.asset(
+              'assets/lottie/Animation - 1725384646971.json',
+              width: 120,
+              height: 120,
+              fit: BoxFit.fill,
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
+        content: const Text(
+          'Do you want to exit the app?',
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('No'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Yes'),
+          ),
+        ],
+      ),
+    );
+
+    return shouldExit ?? false;
   }
 
   Widget _buildPage() {

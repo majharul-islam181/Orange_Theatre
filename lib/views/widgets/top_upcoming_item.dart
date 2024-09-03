@@ -94,26 +94,6 @@ class TopUpcomingItem extends StatelessWidget {
                   color: AppColor.labelColor,
                   fontSize: 13,
                 )),
-            // Row(
-            //   children: [
-            //     Text(
-            //       'Genre: ',
-            //       style: GoogleFonts.poppins(
-            //         fontSize: 12,
-            //       ),
-            //     ),
-            //     Text(
-            //       data.genreIds.join(', '),
-            //       maxLines: 1,
-            //       overflow: TextOverflow.ellipsis,
-            //       style: const TextStyle(
-            //         color: AppColor.primary,
-            //         fontSize: 12,
-            //         fontWeight: FontWeight.w600,
-            //       ),
-            //     ),
-            //   ],
-            // ),
           ],
         ),
       ],
@@ -124,7 +104,7 @@ class TopUpcomingItem extends StatelessWidget {
     return CustomImage(
       '${AppUrl.imageBaseUrl}${data.posterPath}',
       width: double.infinity,
-      height: 150,
+      height: 140,
       radius: 15,
     );
   }

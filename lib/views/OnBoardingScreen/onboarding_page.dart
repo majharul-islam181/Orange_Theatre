@@ -7,7 +7,7 @@ class OnBoardingPage extends StatefulWidget {
   const OnBoardingPage({super.key});
 
   @override
-  State<OnBoardingPage> createState() => _OnBoardingPageState();
+  State<OnBoardingPage> createState() => _OnBoardingPageState();  
 }
 
 class _OnBoardingPageState extends State<OnBoardingPage>
@@ -148,7 +148,7 @@ class _OnBoardingPageState extends State<OnBoardingPage>
                       ]).then(
                         (value) => 
                         
-                        Navigator.of(context).push(
+                        Navigator.of(context).pushReplacement(
                           PageRouteBuilder(
                             transitionDuration:
                                 const Duration(milliseconds: 500),

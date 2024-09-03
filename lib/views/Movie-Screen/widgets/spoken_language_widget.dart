@@ -16,14 +16,14 @@ class SpokenLanguageWidget extends StatelessWidget {
         Text(
           'Spoken Language : ',
           style: GoogleFonts.poppins(
-            fontSize: 15,
+            fontSize: 15,color: Colors.black,
             fontWeight: FontWeight.w300,
           ),
         ),
         Text(
           languages.join(', '),
           style: GoogleFonts.poppins(
-            fontSize: 15,
+            fontSize: 15,color: Colors.black,
             fontWeight: FontWeight.w500,
           ),
         ),

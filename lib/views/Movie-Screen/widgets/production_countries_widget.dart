@@ -26,7 +26,7 @@ class ProductionCountriesWidget extends StatelessWidget {
           child: Text(
             countries.join(', '),
             style: GoogleFonts.poppins(
-              fontSize: 15,
+              fontSize: 15,color: Colors.black,
               fontWeight: FontWeight.w500,
             ),
           ),

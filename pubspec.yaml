@@ -59,6 +59,7 @@ dependencies:
   google_maps_flutter: ^2.9.0
   location: ^6.0.2
   flutter_dotenv: ^5.1.0
+  lottie: ^3.1.2
 
 dev_dependencies:
   flutter_test:
@@ -91,6 +92,8 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/images/splash/
+    - assets/lottie/
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

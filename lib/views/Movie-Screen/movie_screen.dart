@@ -31,41 +31,50 @@ class _MovieScreenState extends State<MovieScreen> {
     _loadFavoriteStatus();
   }
 
-  Future<void> _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
+  // Future<void> _launchURL(String url) async {
+  //   if (await canLaunch(url)) {
+  //     await launch(url);
+  //   } else {
+  //     throw 'Could not launch $url';
+  //   }
+  // }
 
   Future<void> _loadFavoriteStatus() async {
-    var box = Hive.box<FavouriteModelHive>('favouritesBox');
-    setState(() {
-      _isFavorite = box.containsKey(widget.movieId);
-    });
+    try {
+      var box = Hive.box<FavouriteModelHive>('favouritesBox');
+      setState(() {
+        _isFavorite = box.containsKey(widget.movieId);
+      });
+    } catch (e) {
+      print('Error loading favorite status: $e');
+      // Optionally, handle the error
+    }
   }
 
   Future<void> _toggleFavorite(MovieModel movieDetails) async {
-    var box = Hive.box<FavouriteModelHive>('favouritesBox');
+    try {
+      var box = Hive.box<FavouriteModelHive>('favouritesBox');
 
-    // Toggle favorite status
-    if (_isFavorite) {
-      box.delete(widget.movieId);
-    } else {
-      var movie = FavouriteModelHive(
-        id: widget.movieId,
-        originalTitle: movieDetails.originalTitle,
-        releaseDate: movieDetails.releaseDate,
-        backdropPath: movieDetails.backdropPath,
-      );
-      box.put(widget.movieId, movie);
+      // Toggle favorite status
+      if (_isFavorite) {
+        box.delete(widget.movieId);
+      } else {
+        var movie = FavouriteModelHive(
+          id: widget.movieId,
+          originalTitle: movieDetails.originalTitle,
+          releaseDate: movieDetails.releaseDate,
+          backdropPath: movieDetails.backdropPath,
+        );
+        box.put(widget.movieId, movie);
+      }
+
+      // Update local state
+      setState(() {
+        _isFavorite = !_isFavorite;
+      });
+    } catch (e) {
+      print('Error toggling favorite: $e');
     }
-
-    // Update local state
-    setState(() {
-      _isFavorite = !_isFavorite;
-    });
   }
 
   @override
@@ -105,8 +114,7 @@ class _MovieScreenState extends State<MovieScreen> {
                 return const Center(child: Text('No details available.'));
               }
               //cache movie details new
-              _movieDetailsCache[widget.movieId] = movieDetails;
-
+              // _movieDetailsCache[widget.movieId] = movieDetails;
               return _buildMovieDetailsScreen(movieDetails);
 
             default:
@@ -165,7 +173,6 @@ class _MovieScreenState extends State<MovieScreen> {
           MoviesTitleWidget(
             movieTitle: movieDetails.originalTitle,
             movieOverview: movieDetails.overview,
-            onPressed: () => _launchURL(movieDetails.homepage),
           ),
           const SizedBox(
             height: 10,
@@ -219,7 +226,7 @@ class _MovieScreenState extends State<MovieScreen> {
               ],
             ),
           ),
-          //production companies
+          // production companies
           Padding(
             padding: const EdgeInsets.only(right: 20, left: 20, bottom: 18.0),
             child: Column(

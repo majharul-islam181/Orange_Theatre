@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:orange_theatre/bloc/theme/theme_switcher_bloc.dart';
 import 'package:orange_theatre/bloc/theme/theme_switcher_event.dart';
 import 'package:orange_theatre/config/routes/routes.dart';
 import 'package:orange_theatre/models/favourite/favourite_model_hive.dart';
-import 'package:orange_theatre/repository/genre/genre_http_api_repository.dart';
-import 'package:orange_theatre/repository/genre/genre_repository.dart';
+import 'package:orange_theatre/views/OnBoardingScreen/onboarding_page.dart';
 import 'package:orange_theatre/views/RootApp/rootapp_screen.dart';
-import 'repository/movie_details/movie_repository.dart';
 import 'repository/repository.dart';
 import 'package:path_provider/path_provider.dart';
 
 //Depency Injection
 GetIt getIt = GetIt.instance;
 void main() async {
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return Center(child: Text('Something went wrong!'));
+  };
   WidgetsFlutterBinding.ensureInitialized();
   var directory = await getApplicationDocumentsDirectory();
   Hive.init(directory.path);
@@ -29,6 +29,7 @@ void main() async {
     child: const MyApp(),
   ));
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
           //   useMaterial3: true,
           // ),
           onGenerateRoute: Routes.generateRoute,
-          home: const RootApp(),
+          home: const OnBoardingPage(),
         );
       },
     );

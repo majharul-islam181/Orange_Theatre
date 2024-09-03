@@ -12,14 +12,14 @@ class VideoBoolWidget extends StatelessWidget {
       children: [
         Text(
           "Video :",
-          style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w400),
+          style: GoogleFonts.poppins(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w400),
         ),
         const SizedBox(
           width: 5,
         ),
         Icon(
           Icons.cancel_sharp,
-          color: Colors.red[100],
+          color: Colors.red[300],
         )
       ],
     );

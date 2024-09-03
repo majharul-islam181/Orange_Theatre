@@ -10,7 +10,7 @@ class BackButtonWidget extends StatelessWidget {
       left: 16,
       child: ClipOval(
         child: Material(
-          color: Colors.white.withOpacity(0.2),
+          color: Colors.white.withOpacity(0.8),
           child: InkWell(
             splashColor: Colors.grey,
             child: const SizedBox(

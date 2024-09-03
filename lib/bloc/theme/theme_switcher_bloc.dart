@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:orange_theatre/bloc/theme/theme_switcher_event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// Correcting the Bloc class to use ThemeSwitcherEvent instead of ThemeSwitcherBloc for events.
+
 class ThemeSwitcherBloc extends Bloc<ThemeSwitcherEvent, ThemeData> {
   ThemeSwitcherBloc() : super(ThemeData.light()) {
     on<SetInitialTheme>((event, emit) async {

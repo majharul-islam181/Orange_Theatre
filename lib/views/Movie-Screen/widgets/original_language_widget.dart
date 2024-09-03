@@ -11,11 +11,11 @@ class OriginalLanguageWidget extends StatelessWidget {
       children: [
         Text(
           'Original Language : ',
-          style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w300),
+          style: GoogleFonts.poppins(fontSize: 15, color: Colors.black,fontWeight: FontWeight.w300),
         ),
         Text(
           originalLanguage.toString(),
-          style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500),
+          style: GoogleFonts.poppins(fontSize: 15,color: Colors.black, fontWeight: FontWeight.w500),
         ),
       ],
     );

@@ -5,13 +5,11 @@ class CardContent extends StatelessWidget {
   final String releaseDate;
   final String rating;
 
-
-   CardContent({
+  const CardContent({
     super.key,
     required this.movieName,
     required this.releaseDate,
     required this.rating,
-
   });
 
   @override
@@ -27,13 +25,13 @@ class CardContent extends StatelessWidget {
               children: <Widget>[
                 Text(
                   movieName,
-                  style: const TextStyle(fontSize: 17),
+                  style: const TextStyle(fontSize: 17, color: Colors.black),
                   maxLines: 1,
                 ),
                 const SizedBox(height: 2),
                 Text(
                   releaseDate,
-                  style: const TextStyle(color: Colors.grey, fontSize: 10),
+                  style: const TextStyle(fontSize: 10, color: Colors.black),
                 ),
                 const Spacer(),
               ],
@@ -52,7 +50,7 @@ class CardContent extends StatelessWidget {
                 ),
                 Text(
                   rating,
-                  style: const TextStyle(color: Colors.grey, fontSize: 13),
+                  style: const TextStyle(color: Colors.black, fontSize: 13),
                 ),
               ],
             ),

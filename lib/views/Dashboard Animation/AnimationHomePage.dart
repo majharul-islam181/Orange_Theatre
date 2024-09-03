@@ -5,8 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:orange_theatre/bloc/theme/theme_switcher_bloc.dart';
 import 'package:orange_theatre/bloc/theme/theme_switcher_event.dart';
 import 'package:orange_theatre/views/Dashboard%20Animation/tabs/tabs_for_trending_movies.dart';
-import 'package:orange_theatre/views/Dashboard%20Animation/top_upcoming_movies.dart';
-import 'top_trending_movies.dart';
+import '../views.dart';
 import 'tabs/tabs_for_upcoming_movies.dart';
 
 class AnimationHomePage extends StatelessWidget {
@@ -47,6 +46,7 @@ class AnimationHomePage extends StatelessWidget {
         children: <Widget>[
           SafeArea(
             child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[

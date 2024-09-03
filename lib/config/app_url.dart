@@ -10,6 +10,5 @@ class AppUrl {
   static String genreList = '$baseUrl/list/?api_key=$_apiKey';
   static String foursquare_apiKey =
       "fsq3me+a6HnvxHLlL9gshuhXKkbueM3waVdw0zLz2JQbi5c=";
-
-      static String googleMapsApiKey= "a07cd01daacf6d442859ea265542f754";
+      static String googleMapsApiKey= "AIzaSyAMqwNIntwRtoDh51vyMb51Engi3EcvQxo";
 }

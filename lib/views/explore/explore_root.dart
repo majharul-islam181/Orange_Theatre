@@ -4,13 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
-import 'package:orange_theatre/bloc/genre_bloc/genre_bloc.dart';
-import 'package:orange_theatre/bloc/trending_movies_bloc/trending_movies_bloc.dart';
 import 'package:orange_theatre/config/app_url.dart';
 import 'package:orange_theatre/models/genre_model/genres_model.dart';
 import 'package:orange_theatre/utils/constant.dart';
 import 'package:orange_theatre/utils/enums.dart';
 import 'package:orange_theatre/views/Movie-Screen/movie_screen.dart';
+import '../../bloc/bloc.dart';
 import '../../config/colors/color.dart';
 import '../../main.dart';
 import '../../models/trending_movies/trending_movies_model.dart';
@@ -68,6 +67,7 @@ class _ExploreRootState extends State<ExploreRoot> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.redAccent,
         title: getAppBar(),
       ),
       // backgroundColor: Colors.black.withOpacity(.02),
@@ -204,13 +204,14 @@ class _ExploreRootState extends State<ExploreRoot> {
   Widget getAppBar() {
     return Container(
       child: const Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
             padding: EdgeInsets.all(8.0),
             child: Text(
               'Explore Movies',
               style: TextStyle(
-                color: AppColor.textColor,
+                color: Colors.white,
                 fontWeight: FontWeight.w600,
                 fontSize: 20,
               ),

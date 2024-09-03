@@ -1,130 +1,4 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers, library_private_types_in_public_api, use_key_in_widget_constructors
-
-// import 'package:flutter/material.dart';
-// import 'package:location/location.dart';
-// import 'package:http/http.dart' as http;
-// import 'dart:convert';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
-// import 'package:orange_theatre/config/app_url.dart';
-
-// class NearbyTheatersScreen extends StatefulWidget {
-//   @override
-//   _NearbyTheatersScreenState createState() => _NearbyTheatersScreenState();
-// }
-
-// class _NearbyTheatersScreenState extends State<NearbyTheatersScreen> {
-//   LocationData? _currentLocation;
-//   late GoogleMapController mapController;
-//   Set<Marker> _markers = {};
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _getLocation();
-//   }
-
-//   Future<void> _getLocation() async {
-//     Location location = Location();
-
-//     bool _serviceEnabled;
-//     PermissionStatus _permissionGranted;
-
-//     // Check if service is enabled
-//     _serviceEnabled = await location.serviceEnabled();
-//     if (!_serviceEnabled) {
-//       _serviceEnabled = await location.requestService();
-//       if (!_serviceEnabled) {
-//         return;
-//       }
-//     }
-
-//     // Check for permissions
-//     _permissionGranted = await location.hasPermission();
-//     if (_permissionGranted == PermissionStatus.denied) {
-//       _permissionGranted = await location.requestPermission();
-//       if (_permissionGranted != PermissionStatus.granted) {
-//         return;
-//       }
-//     }
-
-//     _currentLocation = await location.getLocation();
-//     if (_currentLocation != null) {
-//       _fetchNearbyTheaters();
-//     }
-//   }
-
-//   Future<void> _fetchNearbyTheaters() async {
-//     final lat = _currentLocation?.latitude;
-//     final lon = _currentLocation?.longitude;
-//     var url =
-//         'https://api.foursquare.com/v3/places/search?query=movie%20theater&ll=$lat,$lon&radius=50000&limit=30';
-
-//     final response = await http.get(
-//       Uri.parse(url),
-//       headers: {
-//         'Authorization': AppUrl.foursquare_apiKey,
-//       },
-//     );
-
-//     if (response.statusCode == 200) {
-//       final data = jsonDecode(response.body);
-//       final places = data['results'] as List;
-
-//       setState(() {
-//         _markers = places.map((place) {
-//           final location = place['geocodes']['main'];
-//           return Marker(
-//             markerId: MarkerId(place['fsq_id']),
-//             position: LatLng(location['latitude'], location['longitude']),
-//             infoWindow: InfoWindow(
-//               title: place['name'],
-//               snippet: place['location']['address'],
-//             ),
-//           );
-//         }).toSet();
-//       });
-//     } else {
-//       throw Exception('Failed to load nearby movie theaters');
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text(
-//           'Nearby Movie Theaters',
-//           style: TextStyle(color: Colors.white),
-//         ),
-//         centerTitle: true,
-//         backgroundColor: Colors.blueAccent,
-//       ),
-//       body: _currentLocation == null
-//           ? const Center(child: CircularProgressIndicator())
-//           : GoogleMap(
-//               onMapCreated: (controller) {
-//                 mapController = controller;
-//                 mapController.animateCamera(
-//                   CameraUpdate.newLatLngZoom(
-//                     LatLng(_currentLocation!.latitude!,
-//                         _currentLocation!.longitude!),
-//                     14,
-//                   ),
-//                 );
-//               },
-//               initialCameraPosition: const CameraPosition(
-//                 target: LatLng(0, 0),
-//                 zoom: 14,
-//               ),
-//               markers: _markers,
-//             ),
-//     );
-//   }
-// }
-
-
-
-
+// ignore_for_file: use_key_in_widget_constructors, library_private_types_in_public_api, no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
@@ -141,8 +15,8 @@ class NearbyTheatersScreen extends StatefulWidget {
 class _NearbyTheatersScreenState extends State<NearbyTheatersScreen> {
   LocationData? _currentLocation;
   late GoogleMapController mapController;
-  Set<Marker> _markers = {};
-  Set<Polyline> _polylines = {};
+  final Set<Marker> _markers = {};
+  final Set<Polyline> _polylines = {};
 
   @override
   void initState() {
@@ -229,6 +103,7 @@ class _NearbyTheatersScreenState extends State<NearbyTheatersScreen> {
               snippet: place['location']['address'],
             ),
             onTap: () {
+             
               _getRouteToMarker(
                 LatLng(location['latitude'], location['longitude']),
               );
@@ -243,8 +118,10 @@ class _NearbyTheatersScreenState extends State<NearbyTheatersScreen> {
 
   Future<void> _getRouteToMarker(LatLng destination) async {
     if (_currentLocation != null) {
-      final origin = '${_currentLocation!.latitude},${_currentLocation!.longitude}';
-      final destinationCoords = '${destination.latitude},${destination.longitude}';
+      final origin =
+          '${_currentLocation!.latitude},${_currentLocation!.longitude}';
+      final destinationCoords =
+          '${destination.latitude},${destination.longitude}';
 
       final directionsUrl =
           'https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destinationCoords&key=${AppUrl.googleMapsApiKey}';
@@ -265,6 +142,19 @@ class _NearbyTheatersScreenState extends State<NearbyTheatersScreen> {
       }
     }
   }
+  
+  /* I tried for user location to shortest path routes, but it needs payment.
+
+  {
+    "error_message": "You must enable Billing on the Google Cloud Project at https://console.cloud.google.com/project/_/billing/enable Learn more at https://developers.google.com/maps/gmp-get-started",
+    "routes": [],
+    "status": "REQUEST_DENIED"
+  }  
+  */
+
+
+
+
 
   List<LatLng> _decodePolyline(String encoded) {
     List<LatLng> polyline = [];
@@ -298,7 +188,7 @@ class _NearbyTheatersScreenState extends State<NearbyTheatersScreen> {
   }
 
   void _addPolyline(List<LatLng> points) {
-    final polylineId = PolylineId("polyline");
+    const polylineId = PolylineId("polyline");
 
     final polyline = Polyline(
       polylineId: polylineId,
@@ -308,7 +198,7 @@ class _NearbyTheatersScreenState extends State<NearbyTheatersScreen> {
     );
 
     setState(() {
-      _polylines.clear(); // Clear any existing polylines
+      _polylines.clear(); // Clear  existing polylines
       _polylines.add(polyline);
     });
   }
@@ -347,5 +237,3 @@ class _NearbyTheatersScreenState extends State<NearbyTheatersScreen> {
     );
   }
 }
-
-

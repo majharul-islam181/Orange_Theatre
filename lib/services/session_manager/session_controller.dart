@@ -1,39 +1,42 @@
-import 'dart:convert';
-
+import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-// import '../../models/user/user_model.dart';
-import '../storage/local_storage.dart';
+import 'package:orange_theatre/views/OnBoardingScreen/onboarding_page.dart';
+import 'package:orange_theatre/views/SplashScreen/splashscreen.dart';
+import '../splash/splash_services.dart'; // Update with the actual path
 
-class SessionController {
-  static final SessionController _session = SessionController._internal();
-  final LocalStorage localStorage = LocalStorage();
-  // UserModel user = UserModel();
-  bool isLogin = false;
-
-  SessionController._internal();
-
-  factory SessionController() {
-    return _session;
-  }
-
-  Future<void> saveUserInPreference(dynamic user) async {
-    await localStorage.setValue('token', jsonEncode(user));
-    // Storing value to check login
-    await localStorage.setValue('isLogin', 'true');
-  }
-
-  Future<void> getUserFromPreference() async {
-    try {
-      var userData = await localStorage.readValue('token');
-      var isLoginData = await localStorage.readValue('isLogin');
-
-      if (userData != null && userData.isNotEmpty) {
-        // _session.user = UserModel.fromJson(jsonDecode(userData));
-       
+class SplashServices {
+  void checkUserStatus(BuildContext context) {
+    SessionController().isOnboardingCompleted().then((onboardingCompleted) {
+      if (kDebugMode) {
+        print('i am in SPLASH SERVICE');
       }
-      _session.isLogin = isLoginData == 'true';
-    } catch (e) {
-      debugPrint(e.toString());
-    }
+
+      Timer(
+        const Duration(seconds: 1),
+        () => Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => onboardingCompleted
+                ? const SplashScreen() // For returning users, show splash screen
+                : const OnBoardingPage(), // For new users, show onboarding
+          ),
+          (route) => false,
+        ),
+      );
+    }).onError((error, stackTrace) {
+      if (kDebugMode) {
+        print('i am ERROR in SPLASH SERVICE');
+      }
+
+      Timer(
+        const Duration(seconds: 1),
+        () => Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const OnBoardingPage()),
+          (route) => false,
+        ),
+      );
+    });
   }
 }

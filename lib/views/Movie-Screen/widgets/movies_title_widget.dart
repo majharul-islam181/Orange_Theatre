@@ -11,7 +11,7 @@ class MoviesTitleWidget extends StatelessWidget {
     super.key,
     required this.movieTitle,
     required this.movieOverview,
-    required this.onPressed,
+     this.onPressed,
   });
 
   @override
@@ -29,7 +29,7 @@ class MoviesTitleWidget extends StatelessWidget {
                   movieTitle.toString(),
                   maxLines: 1,
                   style: GoogleFonts.poppins(
-                      fontSize: 20, fontWeight: FontWeight.w500),
+                      fontSize: 20, color: Colors.black, fontWeight: FontWeight.w500),
                 ),
               ),
               Expanded(
@@ -61,7 +61,7 @@ class MoviesTitleWidget extends StatelessWidget {
           ),
           Text(movieOverview.toString(),
               style: GoogleFonts.poppins(
-                  fontSize: 13, fontWeight: FontWeight.w300)),
+                  fontSize: 13, color: Colors.black,fontWeight: FontWeight.w300)),
         ],
       ),
     );

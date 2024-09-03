@@ -28,7 +28,7 @@ class ProductionCompaniesWidget extends StatelessWidget {
           Text(
             "Production Companies: ",
             style: GoogleFonts.poppins(
-                fontSize: 18, fontWeight: FontWeight.w500),
+                fontSize: 18,color: Colors.black, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 15),
           SizedBox(
@@ -58,7 +58,7 @@ class ProductionCompaniesWidget extends StatelessWidget {
                       Text(
                         company.name,
                         style: GoogleFonts.poppins(
-                            fontSize: 12, fontWeight: FontWeight.w300),
+                            fontSize: 12, color: Colors.black,fontWeight: FontWeight.w300),
                       ),
                     ],
                   ),

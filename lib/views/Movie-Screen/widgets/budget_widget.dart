@@ -15,7 +15,7 @@ class BudgetWidget extends StatelessWidget {
         ),
         Text(
           budget.toString(),
-          style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500),
+          style: GoogleFonts.poppins(fontSize: 15, color: Colors.black,fontWeight: FontWeight.w500),
         ),
       ],
     );

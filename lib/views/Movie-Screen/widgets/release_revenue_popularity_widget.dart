@@ -33,7 +33,7 @@ class ReleaseRevenuePopularityWidget extends StatelessWidget {
                 ),
                 Text(
                   movieRelesedate.toString(),
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.poppins( color: Colors.black,
                       fontSize: 13, fontWeight: FontWeight.w400),
                 ),
               ],
@@ -52,6 +52,7 @@ class ReleaseRevenuePopularityWidget extends StatelessWidget {
                 Text(
                   movieRevenue.toString(),
                   style: GoogleFonts.poppins(
+                    color: Colors.black,
                       fontSize: 13, fontWeight: FontWeight.w400),
                 ),
               ],

@@ -9,7 +9,7 @@ class TabsForTrendingMovies extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
         SizedBox(width: 24),
-        MyTab(text: 'Top Trending', isSelected: true),
+        MyTab(text:  'Top Trending', isSelected: true),
         MyTab(text: 'Top Upcoming', isSelected: false),
       ],
     );
