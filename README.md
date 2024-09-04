@@ -12,12 +12,21 @@ This project is a Flutter-based mobile application designed to provide users wit
 - **Movie Details**: Detailed information about each movie, including genres, release dates, and reviews.
 - **User Favorites**: Users can save movies to their favorites for quick access later.
 - **Nearby Movie Theatre**: User can easily search and find their perfect place to watch movies.
+- **Day/Night Mood**: User can easily switch their life dark to light haha.
 - **Responsive UI**: A visually appealing interface that adapts to different screen sizes, providing a seamless experience across devices.
 
 ``` ```
 
 
 ![Group 1 (2)](https://github.com/user-attachments/assets/3baa13f7-6c2c-4de9-80b6-25e2593bf1c8)
+
+![Group 4](https://github.com/user-attachments/assets/849b8d64-8a35-4d79-8040-c97ae32e9f9b)
+
+![Group 3](https://github.com/user-attachments/assets/5ae5e2f9-89aa-4d8b-93a8-aa3ec9a2a424)
+
+
+
+
 
 ## Project Structure: 
 ```
@@ -133,5 +142,14 @@ To run the project on the selected device or emulator, use the following command
 flutter run
 ```
 
+## Download apk
 
+```
+https://drive.google.com/drive/folders/1820F21o270d1K_lLNnJypJ7Yr0ctPA0q?usp=sharing
+```
+``` ``` 
+
+``` ```
+``` ```
+``` ```
 
