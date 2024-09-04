@@ -74,7 +74,7 @@ class _TopUpcomingMoviesState extends State<TopUpcomingMovies> {
                       enlargeCenterPage: true,
                       disableCenter: true,
                       viewportFraction: .75,
-                      autoPlay: true,
+                      autoPlay: false,
                     ),
                     items: List.generate(
                         state.upcomingMoviesList.data!.results.length, (index) {

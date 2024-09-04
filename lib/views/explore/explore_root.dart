@@ -28,8 +28,6 @@ class _ExploreRootState extends State<ExploreRoot> {
   int _currentPage = 1;
   bool _isFetchingMore = false;
   String searchQuery = "";
-  // String searchQueryForFilter = "";
-  String? _selectedValue;
   List<int> movieId = [];
 
   @override
@@ -132,16 +130,11 @@ class _ExploreRootState extends State<ExploreRoot> {
                       case Status.completed:
                         final movieList = state.trendingMoviesList.data!;
 
-                        final filteredMovies = movieList.results
-                            .where((movie) =>
-                                (movieId.isEmpty ||
-                                    movieId.contains(movie.id)) ||
-                                (searchQuery.isEmpty ||
-                                    movie.title
-                                        .toLowerCase()
-                                        .contains(searchQuery.toLowerCase())))
-                            .toList();
-
+                        final filteredMovies = movieList.results.where((movie) {
+                          return movie.title
+                              .toLowerCase()
+                              .contains(searchQuery.toLowerCase());
+                        }).toList();
                         _isFetchingMore = false;
 
                         if (filteredMovies.isEmpty && _currentPage == 1) {
@@ -311,9 +304,7 @@ class _ExploreRootState extends State<ExploreRoot> {
                   "Filter Options",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 10),
-                const Divider(),
-                const SizedBox(height: 10),
+                const SizedBox(height: 16),
                 Expanded(
                   child: ListView.builder(
                     itemCount: genresList.length,
@@ -326,10 +317,6 @@ class _ExploreRootState extends State<ExploreRoot> {
                             selectedGenres[index] = value ?? false;
                           });
                         },
-                        checkColor:
-                            Colors.white, 
-                        activeColor:
-                            Colors.blue, 
                       );
                     },
                   ),
@@ -355,9 +342,11 @@ class _ExploreRootState extends State<ExploreRoot> {
                       movieId =
                           filteredMovies.map((movie) => movie.id).toList();
                       searchQuery = selectedGenreIds.isEmpty
-                          ? ""
+                          ? "" // Clear searchQuery if no genres selected
                           : 'Filtered by ${selectedGenreIds.length} genres';
+
                     });
+
                     Navigator.pop(context);
                   },
                   child: const Text("Apply Filters"),
